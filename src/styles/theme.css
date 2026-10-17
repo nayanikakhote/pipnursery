@@ -1,0 +1,224 @@
+:root {
+  --cream: #fff8f1;
+  --berry: #a34063;
+  --berry-dark: #7e2f4b;
+  --cocoa: #5c4033;
+  --navy: #30364e;
+  --pink: #efc6d2;
+  --gold: #f4c96b;
+  --lavender: #c9b8e8;
+  --lav-dark: #9c8bc9;
+  --ink: #1f2233;
+
+  --font-serif: 'Fraunces', Georgia, serif;
+  --font-ui: 'Fredoka', 'Trebuchet MS', system-ui, sans-serif;
+  --font-pixel: 'Pixelify Sans', 'Courier New', monospace;
+  --font-mono: 'VT323', 'Courier New', monospace;
+
+  /* DreamOS chrome (night) */
+  --title-a: #30364e;
+  --title-b: #5a5f8f;
+  --title-fg: #fff8f1;
+  --win-bg: #fff8f1;
+  --win-text: #5c4033;
+  --face: #e9e0f3;
+  --hi: #ffffff;
+  --lo: #8e7fae;
+  --lo2: #5b5076;
+  --desk-a: #1f2340;
+  --desk-b: #3a3a6a;
+  --desk-c: #6b5b93;
+
+  color-scheme: light;
+}
+
+[data-theme='sunrise'] {
+  --title-a: #a34063;
+  --title-b: #e48aa3;
+  --desk-a: #ffd9c2;
+  --desk-b: #f6c3cf;
+  --desk-c: #e8d4f2;
+  --face: #fbe8ee;
+  --lo: #c995a8;
+  --lo2: #8f5a6c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: var(--ink);
+  color: var(--win-text);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px dotted var(--berry);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Win98-ish bevels, recoloured ---------- */
+.bevel {
+  background: var(--face);
+  box-shadow:
+    inset -2px -2px 0 var(--lo2),
+    inset 2px 2px 0 var(--hi),
+    inset -4px -4px 0 var(--lo),
+    inset 4px 4px 0 #fbf7ff;
+}
+.bevel-in {
+  background: var(--cream);
+  box-shadow:
+    inset 2px 2px 0 var(--lo2),
+    inset -2px -2px 0 var(--hi),
+    inset 4px 4px 0 var(--lo),
+    inset -4px -4px 0 #fbf7ff;
+}
+
+.btn98 {
+  font-family: var(--font-pixel);
+  font-size: 15px;
+  color: var(--cocoa);
+  min-height: 34px;
+  padding: 4px 14px;
+  border: 0;
+  border-radius: 3px;
+  cursor: pointer;
+  background: var(--face);
+  box-shadow:
+    inset -2px -2px 0 var(--lo2),
+    inset 2px 2px 0 var(--hi),
+    inset -4px -4px 0 var(--lo),
+    inset 4px 4px 0 #fbf7ff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn98:active,
+.btn98[aria-pressed='true'] {
+  box-shadow:
+    inset 2px 2px 0 var(--lo2),
+    inset -2px -2px 0 var(--hi),
+    inset 4px 4px 0 var(--lo);
+  padding-top: 6px;
+  padding-bottom: 2px;
+}
+.btn98--berry {
+  background: var(--berry);
+  color: var(--cream);
+  --hi: #e48aa3;
+  --lo: #7e2f4b;
+  --lo2: #4e1a2c;
+}
+.btn98:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* ---------- Pip's speech bubble ---------- */
+.bubble {
+  position: absolute;
+  max-width: min(280px, 70vw);
+  padding: 10px 14px;
+  background: var(--cream);
+  color: var(--cocoa);
+  font-family: var(--font-ui);
+  font-size: clamp(14px, 1.6vw, 17px);
+  line-height: 1.3;
+  border: 3px solid var(--cocoa);
+  border-radius: 18px;
+  box-shadow: 4px 4px 0 rgba(31, 34, 51, 0.35);
+  z-index: 40;
+  pointer-events: none;
+}
+.bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -14px;
+  left: 28px;
+  width: 18px;
+  height: 18px;
+  background: var(--cream);
+  border-right: 3px solid var(--cocoa);
+  border-bottom: 3px solid var(--cocoa);
+  transform: rotate(45deg) skew(10deg, 10deg);
+}
+
+/* ---------- floating controls ---------- */
+.corner-controls {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  right: 12px;
+  display: flex;
+  gap: 8px;
+  z-index: 60;
+}
+.ctrl {
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+}
+
+/* ---------- toast ---------- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 72px;
+  transform: translateX(-50%);
+  z-index: 200;
+  padding: 10px 16px;
+  font-family: var(--font-pixel);
+  font-size: 15px;
+  color: var(--cocoa);
+  border-radius: 4px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ---------- tiny star field helper ---------- */
+.stars-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+[data-motion='reduced'] *,
+[data-motion='reduced'] *::before,
+[data-motion='reduced'] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
