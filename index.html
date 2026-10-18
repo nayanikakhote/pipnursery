@@ -6,9 +6,20 @@
     <title>Pip's Midnight Nursery</title>
     <meta name="description" content="The portfolio of Pip, Junior Dream Engineer at the Midnight Nursery. Explore Pip's room, boot up DreamOS, and play with Pip's lullabies, nightlights and dream maps." />
     <meta name="theme-color" content="#30364E" />
+    <!-- Social cards need absolute URLs: a crawler has no page context to
+         resolve "/og.png" against. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://pipnursery.vercel.app/" />
     <meta property="og:title" content="Pip's Midnight Nursery" />
     <meta property="og:description" content="I build the dreams you fall asleep inside. — Pip" />
-    <meta property="og:image" content="/og.png" />
+    <meta property="og:image" content="https://pipnursery.vercel.app/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Pip, a baby with a round skull face in a starry nightcap, sitting on a cloud under a crescent moon." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Pip's Midnight Nursery" />
+    <meta name="twitter:description" content="I build the dreams you fall asleep inside. — Pip" />
+    <meta name="twitter:image" content="https://pipnursery.vercel.app/og.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
