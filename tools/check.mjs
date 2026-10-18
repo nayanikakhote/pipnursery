@@ -93,6 +93,36 @@ function attach(page, where) {
 const shot = (page, name) => page.screenshot({ path: path.join(SHOTS, `${name}.png`) });
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
+// Each project app, with the things worth clicking inside it.
+const APP_CHECKS = [
+  { id: 'lullaby', label: 'Lullaby.exe', pokes: ['.windkey', '.windkey', '.windkey', '.step', '.chip', '.lab__play'], pokeMax: 3, pokeWait: 260 },
+];
+
+/** Open an app by its icon/tile label, on either shell. */
+async function openApp(page, label, isPhone, size) {
+  if (isPhone) {
+    const tile = page.locator('.dp-icon', { hasText: label }).first();
+    await tile.scrollIntoViewIfNeeded();
+    await tile.click();
+    await page.waitForSelector('.dp-app', { timeout: 8000 });
+  } else {
+    const icon = page.locator('.dicon', { hasText: label }).first();
+    await icon.focus();
+    await page.keyboard.press('Enter');
+    await page.waitForSelector('.win98', { timeout: 8000 });
+  }
+  void size;
+}
+
+async function closeApp(page, isPhone) {
+  if (isPhone) {
+    const back = page.locator('.dp-app__back').first();
+    if (await back.count()) await back.click();
+  } else {
+    await page.keyboard.press('Escape');
+  }
+}
+
 /** Reports anything rendering outside its container or off-screen. */
 async function checkOverflow(page, where) {
   const bad = await page.evaluate(() => {
@@ -256,6 +286,31 @@ async function runSize(browser, size) {
     await page.mouse.click(size.width / 2, size.height / 2);
     await page.waitForFunction(() => !!document.querySelector('.boot, .desktop'), null, { timeout: 10000 });
     await wait(500);
+  }
+
+  // Every project app gets opened, poked and screenshotted at this size.
+  for (const app of APP_CHECKS) {
+    try {
+      await openApp(page, app.label, isPhone, size);
+      await wait(600);
+      for (const sel of app.pokes ?? []) {
+        const els = page.locator(sel);
+        const n = Math.min(await els.count(), app.pokeMax ?? 4);
+        for (let i = 0; i < n; i++) {
+          await els.nth(i).click({ timeout: 3000, force: true }).catch(() => {});
+          await wait(app.pokeWait ?? 180);
+        }
+      }
+      await wait(500);
+      await shot(page, `${where}-app-${app.id}`);
+      await checkOverflow(page, `${where} ${app.id}`);
+      if (size.touch) await checkTouchTargets(page, `${where} ${app.id}`);
+      await closeApp(page, isPhone);
+      await wait(350);
+    } catch (e) {
+      problems.push(`[${where}] app ${app.id}: ${e.message}`);
+      await closeApp(page, isPhone).catch(() => {});
+    }
   }
 
   // theme toggle + mute toggle still work at the end

@@ -54,6 +54,12 @@ export function now() {
   return ctx ? ctx.currentTime : 0;
 }
 
+/** Seconds, from the audio clock when there is one and the wall clock when
+    there isn't — so a sequencer keeps time even muted or before first tap. */
+export function clock() {
+  return ctx && ctx.state === 'running' ? ctx.currentTime : performance.now() / 1000;
+}
+
 interface ToneOpts {
   type?: OscillatorType;
   gain?: number;

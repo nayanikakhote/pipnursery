@@ -74,6 +74,8 @@ interface DreamState {
   progress: Record<ProjectKey, boolean>;
   badges: string[];
   secretUnlocked: boolean;
+  /** Small named facts the apps set and read: "lullaby:played", "light:order", … */
+  flags: Record<string, string | number | boolean>;
   visitor: { visits: number; lastVisit?: string; name?: string };
 
   // actions
@@ -95,6 +97,7 @@ interface DreamState {
   clearBubble: (key: number) => void;
   showToast: (text: string) => void;
   clearToast: (key: number) => void;
+  setFlag: (key: string, value?: string | number | boolean) => void;
   award: (badge: string) => boolean;
   complete: (p: ProjectKey) => boolean;
   clickPip: () => number;
@@ -135,6 +138,7 @@ export const useDream = create<DreamState>()(
       progress: { ...emptyProgress },
       badges: [],
       secretUnlocked: false,
+      flags: {},
       visitor: { visits: 0 },
 
       setScene: (scene) => set({ scene, startOpen: false }),
@@ -190,6 +194,8 @@ export const useDream = create<DreamState>()(
         if (get().toast?.key === key) set({ toast: null });
       },
 
+      setFlag: (key, value = true) => set({ flags: { ...get().flags, [key]: value } }),
+
       award: (badge) => {
         const { badges } = get();
         if (badges.includes(badge)) return false;
@@ -219,6 +225,7 @@ export const useDream = create<DreamState>()(
           progress: { ...emptyProgress },
           badges: [],
           secretUnlocked: false,
+          flags: {},
           visitor: { visits: 1 },
         }),
     }),
@@ -247,6 +254,7 @@ export const useDream = create<DreamState>()(
         progress: s.progress,
         badges: s.badges,
         secretUnlocked: s.secretUnlocked,
+        flags: s.flags,
         visitor: s.visitor,
       }),
     },
