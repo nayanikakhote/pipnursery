@@ -1,5 +1,6 @@
 import { lazy, type ComponentType, type LazyExoticComponent } from 'react';
 import type { AppId } from '../store/dreamStore';
+import { art } from '../content/assets';
 
 export type AppGroup = 'me' | 'work' | 'fun' | 'files';
 
@@ -56,3 +57,68 @@ export const APPS: AppDef[] = [
 
 export const appById = Object.fromEntries(APPS.map((a) => [a.id, a])) as Record<AppId, AppDef>;
 export const WORK = APPS.filter((a) => a.group === 'work');
+
+/**
+ * Warm every app chunk while the desktop is idle.
+ *
+ * Each app is code-split, so the first click on an icon had to fetch its
+ * chunk before anything appeared — on a cold connection that was ten seconds
+ * of "loading dreams…". Calling the same dynamic imports during idle time
+ * means the chunk is usually already in the module cache by the time it's
+ * wanted, and React.lazy resolves immediately.
+ *
+ * Safe to call more than once: a dynamic import is memoised by the runtime.
+ */
+let prefetched = false;
+export function prefetchApps() {
+  if (prefetched || typeof window === 'undefined') return;
+  prefetched = true;
+
+  const loaders = [
+    () => import('../apps/MyPip'),
+    () => import('../apps/TextFiles'),
+    () => import('../apps/Stickers'),
+    () => import('../apps/LullabyLab'),
+    () => import('../apps/Nightlights'),
+    () => import('../apps/DreamRoutes'),
+    () => import('../apps/MyStory'),
+    () => import('../apps/BedtimeStorybook'),
+    () => import('../apps/RattleAndBlocks'),
+    () => import('../apps/GrowthChart'),
+    () => import('../apps/DreamWishes'),
+    () => import('../apps/PipChat'),
+    () => import('../apps/DesktopToys'),
+  ];
+
+  // One per idle slice, so warming the cache never competes with the paint.
+  const idle: (cb: () => void) => void =
+    'requestIdleCallback' in window
+      ? (cb) => (window as unknown as { requestIdleCallback: (c: () => void) => void }).requestIdleCallback(cb)
+      : (cb) => void window.setTimeout(cb, 200);
+
+  let i = 0;
+  const next = () => {
+    if (i >= loaders.length) return;
+    const load = loaders[i++];
+    // a chunk that fails to prefetch is not an error: the real import retries
+    void load().catch(() => {});
+    idle(next);
+  };
+  idle(next);
+}
+
+/** The drawn poses Pip can switch to, warmed after the nursery's first paint
+ *  so a yawn or a sneeze never arrives as a blank frame. */
+export function prefetchPipPoses() {
+  if (typeof window === 'undefined') return;
+  const idle: (cb: () => void) => void =
+    'requestIdleCallback' in window
+      ? (cb) => (window as unknown as { requestIdleCallback: (c: () => void) => void }).requestIdleCallback(cb)
+      : (cb) => void window.setTimeout(cb, 300);
+  idle(() => {
+    for (const name of ['pip-yawn', 'pip-cheer', 'pip-pout', 'pip-sneeze', 'pip-whoa', 'pip-asleep']) {
+      const src = art(name);
+      if (src) new Image().src = src;
+    }
+  });
+}

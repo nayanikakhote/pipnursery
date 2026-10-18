@@ -1,7 +1,7 @@
 import { Suspense, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useDream } from '../store/dreamStore';
-import { APPS, appById } from '../os/apps';
+import { APPS, appById, prefetchApps } from '../os/apps';
 import PixelIcon from '../components/PixelIcon';
 import Pip from '../components/Pip';
 import { SpeechBubble, MuteToggle, ThemeToggle } from '../components/Controls';
@@ -27,6 +27,7 @@ export default function DreamPad() {
   const Comp = def?.component;
 
   useEffect(() => {
+    prefetchApps();
     const t = window.setTimeout(() => say('welcome to my dreampad! tap anything.'), 500);
     return () => window.clearTimeout(t);
   }, [say]);

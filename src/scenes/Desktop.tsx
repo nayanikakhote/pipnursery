@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { useDream, type AppId } from '../store/dreamStore';
-import { APPS, appById, type AppDef } from '../os/apps';
+import { APPS, appById, prefetchApps, type AppDef } from '../os/apps';
 import Window from '../os/Window';
 import PixelIcon from '../components/PixelIcon';
 import Pip from '../components/Pip';
@@ -194,6 +194,7 @@ export default function Desktop({ mode }: { mode: Mode }) {
   }, []);
 
   useEffect(() => {
+    prefetchApps();
     const t = window.setTimeout(() => say(window.matchMedia('(pointer: coarse)').matches ? lines.desktopHelloTouch : lines.desktopHello), 500);
     return () => window.clearTimeout(t);
   }, [say]);

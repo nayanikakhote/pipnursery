@@ -8,6 +8,7 @@ import { sfx, unlockAudio, PENTA } from '../audio/audio';
 import { lines, pick } from '../content/copy';
 import { STICKERS } from '../content/stickers';
 import { ART, SCREENS, art } from '../content/assets';
+import { prefetchPipPoses } from '../os/apps';
 import { asset } from '../lib/asset';
 import './nursery.css';
 
@@ -66,6 +67,7 @@ export default function Nursery() {
   // from setting new ones — so a first-time visitor was never greeted at all.
   // The count is read inside the timeout instead, by which time it is settled.
   useEffect(() => {
+    prefetchPipPoses();
     const t1 = window.setTimeout(() => {
       const n = useDream.getState().visitor.visits;
       say(n > 1 ? lines.returning(n) : lines.firstHello);
