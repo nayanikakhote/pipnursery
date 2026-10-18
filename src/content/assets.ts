@@ -9,9 +9,11 @@ import { art, SCREENS } from './art.gen';
 export { art, SCREENS };
 
 export const ART = {
-  /** No empty-nursery painting was ever generated, so the CSS room stays. */
-  nurseryWide: undefined as string | undefined,
-  nurseryTall: undefined as string | undefined,
+  /** The painted room: 16:9 for landscape, 9:16 for portrait. Both are the
+   *  same nursery, so the props sit in the same places in each one's own
+   *  perspective. */
+  nurseryWide: art('nursery-wide'),
+  nurseryTall: art('nursery-tall'),
 
   crtDesk: art('crt-desk'),
   wallpaperNight: art('wallpaper-night'),

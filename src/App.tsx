@@ -76,9 +76,16 @@ export default function App() {
     const onInput = () => {
       lastInput.current = performance.now();
       const st = useDream.getState();
-      // Once the story has been read Pip is asleep in his room on purpose —
-      // don't keep startling him awake every time the mouse moves.
-      const tuckedIn = st.scene === 'nursery' && st.progress.story;
+      // Only wake Pip when he nodded off by himself. Several scenes put him
+      // to sleep deliberately — the finale, the secret room, the shutdown
+      // screen, and his own room once the story has been read — and a mouse
+      // move there used to make him announce he was "just resting my eye
+      // sockets" in the middle of his own goodnight.
+      const tuckedIn =
+        st.scene === 'finale' ||
+        st.scene === 'secret' ||
+        st.scene === 'shutdown' ||
+        (st.scene === 'nursery' && st.progress.story);
       if (st.mood === 'asleep' && !tuckedIn) {
         st.setMood('whoa');
         st.say(lines.wake);

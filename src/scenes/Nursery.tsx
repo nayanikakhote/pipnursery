@@ -12,13 +12,10 @@ import { prefetchPipPoses } from '../os/apps';
 import { asset } from '../lib/asset';
 import './nursery.css';
 
-const HIDDEN_STARS = [
-  { id: 's1', l: 13, t: 21 },
-  { id: 's2', l: 90, t: 9 },
-  { id: 's3', l: 57, t: 47 },
-  { id: 's4', l: 30, t: 95 },
-  { id: 's5', l: 96, t: 66 },
-];
+// Five of the little gold stars painted on the wall are real buttons. Their
+// positions live in nursery.css, because each painting has them in different
+// places and the layout has to be able to move them.
+const HIDDEN_STARS = ['s1', 's2', 's3', 's4', 's5'];
 
 export function handlePipClick() {
   const st = useDream.getState();
@@ -108,7 +105,8 @@ export default function Nursery() {
 
   const allStars = found.length === HIDDEN_STARS.length;
   const allStickers = STICKERS.every((st) => badges.includes(st.id));
-  const room = ART.nurseryWide;
+  const wideRoom = ART.nurseryWide ?? '';
+  const tallRoom = ART.nurseryTall ?? ART.nurseryWide ?? '';
   const crtArt = ART.crtDesk;
   const scr = SCREENS['crt-desk'];
   const crtScreen = scr
@@ -116,7 +114,10 @@ export default function Nursery() {
     : undefined;
 
   return (
-    <div className={`nursery-scene ${progress.nightlights ? 'is-lit' : ''} ${progress.story ? 'is-bedtime' : ''}`}>
+    <div
+      className={`nursery-scene ${progress.nightlights ? 'is-lit' : ''} ${progress.story ? 'is-bedtime' : ''}`}
+      style={{ ['--room-blur' as string]: `url(${wideRoom})` }}
+    >
       <motion.div
         className="nursery-zoom"
         style={{ transformOrigin: origin }}
@@ -127,33 +128,33 @@ export default function Nursery() {
         }}
       >
         <div className="stage" aria-label="Pip's nursery">
-          {room ? (
-            <img className="room-img" src={room} alt="" />
-          ) : (
-            <div className="room" aria-hidden="true">
-              <div className="room__wall" />
-              <div className="room__floor" />
-              <div className="room__skirting" />
-              <div className="room__rug" />
-              <div className="room__shelf">
-                <span className="book b1" />
-                <span className="book b2" />
-                <span className="book b3" />
-                <span className={`mini-book ${progress.bedtime ? 'on' : ''}`} />
-              </div>
-              <div className={`room__door ${progress.growth ? 'marked' : ''}`} />
-            </div>
-          )}
+          {/* The painted room. Both paintings ship; CSS picks one by aspect
+              ratio, so crossing 4/5 swaps the art and the prop layout in the
+              same reflow. The CSS-drawn room is gone — the paintings have the
+              wall, floor, window, shelf, door and rug already. */}
+          <img className="room-img room-img--wide" src={wideRoom} alt="" draggable={false} fetchPriority="high" />
+          <img className="room-img room-img--tall" src={tallRoom} alt="" draggable={false} fetchPriority="high" />
+          <div className="room-dark" aria-hidden="true" />
+          <div className="room-sunrise" aria-hidden="true" />
 
-          {/* window */}
-          <button type="button" className="win-round" aria-label="The window, look for a shooting star" onClick={() => { unlockAudio(); sfx.sparkle(); setShooting((n) => n + 1); }}>
-            <span className="win-round__sky">
-              <span className="win-round__moon" />
-              <span className="win-round__roofs" />
-              {progress.routes && <span className="win-round__lights" />}
-              {shooting > 0 && <span key={shooting} className="shooting-star" />}
-            </span>
+
+          {/* The painted window. The hotspot is transparent and sits exactly
+              over the glass; only the shooting star and the delivery glow are
+              drawn on top. */}
+          <button
+            type="button"
+            className={`win-round ${progress.routes ? 'win-round--lit' : ''}`}
+            aria-label="The round window. Look for a shooting star."
+            onClick={() => {
+              unlockAudio();
+              sfx.sparkle();
+              setShooting((n) => n + 1);
+            }}
+          >
+            <span className="win-round__glow" aria-hidden="true" />
+            {shooting > 0 && <span key={shooting} className="shooting-star" aria-hidden="true" />}
           </button>
+
 
           {/* hanging mobile */}
           <button
@@ -339,17 +340,14 @@ export default function Nursery() {
           <SpeechBubble className="nursery-bubble" />
 
           {/* hidden stars easter egg */}
-          {HIDDEN_STARS.map((s) => (
+          {HIDDEN_STARS.map((id) => (
             <button
-              key={s.id}
+              key={id}
               type="button"
-              className={`hidden-star ${found.includes(s.id) ? 'found' : ''}`}
-              style={{ left: `${s.l}%`, top: `${s.t}%` }}
-              aria-label="a tiny star"
-              onClick={() => findStar(s.id)}
-            >
-              ★
-            </button>
+              className={`hidden-star hs-${id} ${found.includes(id) ? 'found' : ''}`}
+              aria-label={found.includes(id) ? 'A little star, found' : 'A little star on the wall'}
+              onClick={() => findStar(id)}
+            />
           ))}
           {allStars && (
             <svg className="pip-constellation" viewBox="0 0 300 100" aria-hidden="true">
@@ -363,7 +361,10 @@ export default function Nursery() {
               ))}
             </svg>
           )}
-          {progress.routes && <div className="wall-stars" aria-hidden="true" />}
+          {/* Reactions, painted onto the room rather than onto CSS furniture.
+              Each one is positioned per layout in nursery.css. */}
+          {progress.bedtime && <span className="react-book" aria-hidden="true" title="the book Pip wrote" />}
+          {progress.growth && <span className="react-mark" aria-hidden="true" />}
           {progress.story && <div className="ceiling-stars" aria-hidden="true" />}
         </div>
       </motion.div>
