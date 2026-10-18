@@ -195,6 +195,9 @@ export default function BedtimeStorybook() {
         <button type="button" className="btn98" onClick={() => go(page - 1)} disabled={page === COVER}>
           ← back
         </button>
+        <span className="book__count mono" aria-hidden="true">
+          {page + 2} / {END + 2}
+        </span>
         <ol className="book__dots" aria-label={`Page ${page + 2} of ${END + 2}`}>
           {Array.from({ length: END + 2 }, (_, i) => i + COVER).map((n) => (
             <li key={n}>

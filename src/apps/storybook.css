@@ -277,8 +277,16 @@
   padding: 0;
   list-style: none;
 }
+.book__count {
+  display: none;
+  color: var(--cream);
+  opacity: 0.85;
+}
+[data-theme='sunrise'] .book__count {
+  color: var(--cocoa);
+}
 .book__dot {
-  width: 26px;
+  width: 44px;
   height: 44px;
   padding: 0;
   border: 0;
@@ -335,6 +343,14 @@
   }
   .book__corner {
     width: 44px;
+  }
+  /* Eight 44px dots don't fit a phone, and a shrunken dot isn't tappable —
+     so the dots step aside for a plain page count. */
+  .book__dots {
+    display: none;
+  }
+  .book__count {
+    display: inline;
   }
 }
 
