@@ -98,6 +98,7 @@ const APP_CHECKS = [
   { id: 'lullaby', label: 'Lullaby.exe', pokes: ['.windkey', '.windkey', '.windkey', '.step', '.chip', '.lab__play'], pokeMax: 3, pokeWait: 260 },
   { id: 'routes', label: 'Dream_Routes.map', pokes: ['.roof', '.dr__deliver', '.roof', '.dr__deliver', '.roof', '.dr__deliver'], pokeMax: 1, pokeWait: 2100 },
   { id: 'nightlights', label: 'Nightlights', pokes: ['.lamp__btn', '.swatch', '.card__more', '.nl__controls .btn98'], pokeMax: 3, pokeWait: 260 },
+  { id: 'bedtime', label: 'Bedtime Story', pokes: ['.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child'], pokeMax: 1, pokeWait: 700 },
   { id: 'story', label: 'My_Story.doc', pokes: ['.hot', '.story__star'], pokeMax: 5, pokeWait: 420, after: '.story__end', finale: true },
 ];
 

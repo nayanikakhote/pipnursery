@@ -69,8 +69,12 @@ export default function LullabyLab() {
   const gridRef = useRef<HTMLDivElement>(null);
   const timers = useRef<number[]>([]);
   const loop = useRef<number | null>(null);
+  // The running scheduler reads the latest pattern and tempo through this ref,
+  // so editing a step mid-playback changes the very next bar.
   const live = useRef({ pattern, stepMs });
-  live.current = { pattern, stepMs };
+  useEffect(() => {
+    live.current = { pattern, stepMs };
+  }, [pattern, stepMs]);
 
   const clearTimers = () => {
     timers.current.forEach((t) => window.clearTimeout(t));

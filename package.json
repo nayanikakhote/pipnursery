@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "oxlint",
+    "lint": "oxlint && node tools/css-collisions.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
