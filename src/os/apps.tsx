@@ -27,6 +27,7 @@ const DreamRoutes = lazy(() => import('../apps/DreamRoutes'));
 const MyStory = lazy(() => import('../apps/MyStory'));
 const BedtimeStorybook = lazy(() => import('../apps/BedtimeStorybook'));
 const RattleAndBlocks = lazy(() => import('../apps/RattleAndBlocks'));
+const GrowthChart = lazy(() => import('../apps/GrowthChart'));
 
 export const APPS: AppDef[] = [
   { id: 'mypip', title: 'My Pip — employee file', label: 'My Pip', icon: 'idcard', group: 'me', w: 580, h: 640, component: MyPip },
@@ -40,7 +41,7 @@ export const APPS: AppDef[] = [
   { id: 'routes', title: 'Dream_Routes.map', label: 'Dream_Routes.map', icon: 'map', group: 'work', w: 820, h: 680, component: DreamRoutes },
   { id: 'toys', title: 'Rattle_&_Blocks/', label: 'Rattle & Blocks', icon: 'rattle', group: 'work', w: 720, h: 640, component: RattleAndBlocks },
   { id: 'bedtime', title: 'Bedtime_Story.book', label: 'Bedtime Story', icon: 'book', group: 'work', w: 700, h: 680, component: BedtimeStorybook },
-  { id: 'growth', title: 'Growth_Chart.png', label: 'Growth Chart', icon: 'ruler', group: 'work', w: 460, h: 640, component: Placeholder },
+  { id: 'growth', title: 'Growth_Chart.png', label: 'Growth Chart', icon: 'ruler', group: 'work', w: 520, h: 660, component: GrowthChart },
 
   { id: 'lantern', title: 'Lantern.exe', label: 'Lantern.exe', icon: 'lantern', group: 'fun', w: 400, h: 300, component: Placeholder },
   { id: 'gravity', title: 'Gravity.exe', label: 'Gravity.exe', icon: 'star', group: 'fun', w: 400, h: 300, component: Placeholder },
