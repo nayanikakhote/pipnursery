@@ -2,6 +2,8 @@
 
 Pip's Midnight Nursery is an interactive portfolio featuring Pip, a tiny skull baby with a very important job: Junior Dream Engineer.
 
+**Live site: [pipnursery.vercel.app](https://pipnursery.vercel.app/)**
+
 Welcome to Pip's little corner of the internet, where bedtime comes with its own operating system, lullabies have their own programs, and even the nightlights have a personality. 🪔 Boot up DreamOS 98, poke around the nursery, deliver a few dreams, and see what happens when a curious little skull baby gets his hands on a computer.
 
 There's music to make 🎼, toys to play with 🪇, a bedtime story to uncover 📖, and wishes waiting to be left behind. If you're the sort who clicks on absolutely everything, you're in luck. Pip has a few secrets tucked away for visitors who refuse to go to bed on time. 🗝️
@@ -81,5 +83,12 @@ The project is organized around an interactive desktop experience, with individu
 ## Credits
 
 Created for haX.baby: Baby's First Website, Track 1.
+
+- Pip and the official renders (Pip on his cloud, the ID-card portrait, the music box, the dream lantern) are © haX.baby, from the Track 1 creator asset pack.
+- All other illustrations are AI-generated with ChatGPT for this project, then cut out and resized by `tools/process_art.py`.
+- Every sound is synthesized live with the Web Audio API — there are no audio files in this repository.
+- Fonts: Fraunces, Fredoka, Pixelify Sans and VT323 (Google Fonts, SIL Open Font License).
+
+The full credits are also readable inside the site, in `Credits.txt` on Pip's desktop.
 
 Pip says it's bedtime. Pip is also still on his computer. 🌙

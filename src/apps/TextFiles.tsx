@@ -71,10 +71,7 @@ ILLUSTRATIONS
   the rattles, the growth wall, the creatures, the
   five story scenes, the crayon storybook, the
   icon and sticker sheets, both wallpapers —
-  AI-generated for this project.
-  [TOOL NAME — Nayu, please fill this in before
-  submitting; it is the one credit I could not
-  write for you.]
+  AI-generated with ChatGPT for this project.
   Cut out, keyed and resized by a script in this
   repo: tools/process_art.py
 
