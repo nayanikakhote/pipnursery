@@ -341,3 +341,258 @@
 [data-motion='reduced'] .rattle__burst i {
   animation: none;
 }
+
+/* ---------------- the three toybox games ---------------- */
+.toys__loading {
+  padding: 24px;
+  text-align: center;
+  opacity: 0.7;
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  min-height: 100%;
+}
+.game__how {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.45;
+  text-align: center;
+  opacity: 0.9;
+}
+.game__bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+.game__bar .btn98 {
+  min-height: 44px;
+  min-width: 112px;
+}
+.game__win {
+  color: var(--gold);
+}
+.game__lose {
+  color: var(--pink);
+}
+.game__keys {
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  opacity: 0.6;
+}
+.game__ending {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(244, 201, 107, 0.16);
+  box-shadow: inset 0 0 0 2px rgba(244, 201, 107, 0.4);
+  font-family: var(--font-serif);
+  font-size: 15px;
+  text-align: center;
+}
+
+/* --- stack the dreams --- */
+.stack__area {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  min-height: 210px;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.26), rgba(0, 0, 0, 0.14));
+  box-shadow: inset 0 0 0 2px rgba(255, 248, 241, 0.1);
+  cursor: pointer;
+  overflow: hidden;
+}
+.stack__area:disabled {
+  cursor: default;
+}
+.stack__area:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+.stack__inner {
+  position: absolute;
+  inset: 8px 8px 10px;
+}
+.stack__slab {
+  position: absolute;
+  height: 20%;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: clamp(11px, 2.6cqw, 16px);
+  letter-spacing: 0.06em;
+  color: var(--cocoa);
+  box-shadow:
+    inset -3px -4px 0 rgba(0, 0, 0, 0.16),
+    inset 2px 2px 0 rgba(255, 255, 255, 0.5);
+  overflow: hidden;
+  white-space: nowrap;
+}
+.stack__slab--live {
+  box-shadow:
+    inset -3px -4px 0 rgba(0, 0, 0, 0.16),
+    inset 2px 2px 0 rgba(255, 255, 255, 0.5),
+    0 0 14px rgba(244, 201, 107, 0.55);
+}
+.stack__area.is-tumbling .stack__slab {
+  animation: slab-fall 0.7s ease-in forwards;
+}
+.stack__area.is-tumbling .stack__slab:nth-child(even) {
+  animation-direction: alternate;
+}
+@keyframes slab-fall {
+  to {
+    transform: translateY(120px) rotate(18deg);
+    opacity: 0;
+  }
+}
+
+/* --- match the dream --- */
+/* Capped so all three rows fit the window without scrolling — a memory game
+   you have to scroll is a memory game you can't play. */
+.match {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+.card3 {
+  aspect-ratio: 3 / 4;
+  min-height: 56px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  perspective: 600px;
+}
+.card3:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+.card3__inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.card3.is-open .card3__inner {
+  transform: rotateY(180deg);
+}
+.card3__back,
+.card3__front {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  backface-visibility: hidden;
+}
+.card3__back {
+  background: linear-gradient(145deg, #4a4179, #30364e);
+  color: var(--gold);
+  font-size: 22px;
+  box-shadow: inset 0 0 0 2px rgba(244, 201, 107, 0.35);
+}
+.card3__front {
+  background: var(--cream);
+  transform: rotateY(180deg);
+  box-shadow: inset 0 0 0 2px rgba(163, 64, 99, 0.3);
+}
+.card3.is-done {
+  cursor: default;
+}
+.card3.is-done .card3__front {
+  box-shadow:
+    inset 0 0 0 2px var(--gold),
+    0 0 14px rgba(244, 201, 107, 0.55);
+}
+
+/* --- dream catch --- */
+.catch {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  min-height: 210px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #232749, #3b3568);
+  box-shadow: inset 0 0 0 2px rgba(255, 248, 241, 0.1);
+  touch-action: none;
+  cursor: crosshair;
+}
+.fall {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-size: 22px;
+  line-height: 1;
+  pointer-events: none;
+}
+.fall--star {
+  color: var(--gold);
+  text-shadow: 0 0 10px rgba(244, 201, 107, 0.9);
+}
+.fall--bubble {
+  color: var(--lavender);
+  text-shadow: 0 0 10px rgba(201, 184, 232, 0.9);
+}
+.fall--sock {
+  filter: grayscale(0.7);
+  font-size: 19px;
+}
+.catch__basket {
+  position: absolute;
+  bottom: 4px;
+  width: 18%;
+  height: 13%;
+  transform: translateX(-50%);
+  border-radius: 6px 6px 16px 16px;
+  background: linear-gradient(180deg, #d9b183, #b98157);
+  box-shadow:
+    inset 0 5px 0 rgba(0, 0, 0, 0.25),
+    0 3px 8px rgba(0, 0, 0, 0.4);
+}
+.catch__idle {
+  position: absolute;
+  inset: auto 10% 42%;
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-pixel);
+  font-size: 15px;
+  color: var(--cream);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+@container (max-width: 420px) {
+  .match {
+    gap: 6px;
+  }
+  .stack__area,
+  .catch {
+    min-height: 180px;
+  }
+}
+
+[data-motion='reduced'] .card3__inner {
+  transition: none;
+}
+[data-motion='reduced'] .stack__area.is-tumbling .stack__slab {
+  animation: none;
+  opacity: 0.3;
+}

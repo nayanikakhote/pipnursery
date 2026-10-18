@@ -3,9 +3,14 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDream } from '../store/dreamStore';
 import { sfx, unlockAudio } from '../audio/audio';
 import { RATTLE_ART, art } from '../content/assets';
+import { lazy, Suspense } from 'react';
 import './toys.css';
 
-type Tab = 'rattles' | 'blocks';
+const StackTheDreams = lazy(() => import('./toys/StackTheDreams'));
+const MatchTheDream = lazy(() => import('./toys/MatchTheDream'));
+const DreamCatch = lazy(() => import('./toys/DreamCatch'));
+
+type Tab = 'rattles' | 'blocks' | 'stack' | 'match' | 'catch';
 
 /* ------------------------------------------------------------------ rattles */
 
@@ -360,7 +365,17 @@ export default function RattleAndBlocks() {
   const tabs: { id: Tab; label: string }[] = [
     { id: 'rattles', label: 'Rattles' },
     { id: 'blocks', label: 'Blocks' },
+    { id: 'stack', label: 'Stack the Dreams' },
+    { id: 'match', label: 'Match the Dream' },
+    { id: 'catch', label: 'Dream Catch' },
   ];
+
+  const win = (badge: string, line: string) => () => {
+    if (award(badge)) {
+      setMood('cheer');
+      say(line);
+    }
+  };
 
   return (
     <div className="toys">
@@ -384,7 +399,13 @@ export default function RattleAndBlocks() {
         ))}
       </div>
       <div className="toys__body" role="tabpanel" id={`toys-${tab}`} aria-labelledby={`toystab-${tab}`}>
-        {tab === 'rattles' ? <Rattles onBand={onBand} /> : <Blocks onSpell={onSpell} />}
+        <Suspense fallback={<p className="toys__loading mono">getting the toy out…</p>}>
+          {tab === 'rattles' && <Rattles onBand={onBand} />}
+          {tab === 'blocks' && <Blocks onSpell={onSpell} />}
+          {tab === 'stack' && <StackTheDreams onWin={win('game-stack', 'four whole dreams, stacked. you have a knack.')} />}
+          {tab === 'match' && <MatchTheDream onWin={win('game-match', 'every pair!! my memory is terrible, so that was all you.')} />}
+          {tab === 'catch' && <DreamCatch onWin={win('game-catch', "that's a whole night's deliveries in twenty seconds.")} />}
+        </Suspense>
       </div>
     </div>
   );

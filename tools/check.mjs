@@ -102,7 +102,7 @@ const APP_CHECKS = [
   { id: 'chat', label: 'PipChat.exe', pokes: ['.pc__chip', '.pc__chip', '.pc__chip'], pokeMax: 1, pokeWait: 2600, chat: true },
   { id: 'wishes', label: 'Dream Wishes', pokes: ['.wish__sticker'], pokeMax: 3, pokeWait: 200, form: true },
   { id: 'growth', label: 'Growth Chart', pokes: ['.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gmark__btn', '.gc__controls .btn98:first-of-type'], pokeMax: 1, pokeWait: 600 },
-  { id: 'toys', label: 'Rattle & Blocks', pokes: ['.rattle__btn', '.rattle__btn', '.rattle__btn', '.tab98:nth-child(2)', '.bblock--tray', '.bcol', '.bblock--tray', '.bcol', '.bblock--tray', '.bcol', '.toys__controls .btn98'], pokeMax: 1, pokeWait: 300 },
+  { id: 'toys', label: 'Rattle & Blocks', pokes: ['.rattle__btn', '.rattle__btn', '.rattle__btn', '.tab98:nth-child(2)', '.bblock--tray', '.bcol', '.bblock--tray', '.bcol', '.bblock--tray', '.bcol', '.toys__controls .btn98', '.tab98:nth-child(3)', '.game__bar .btn98', '.stack__area', '.stack__area', '.tab98:nth-child(4)', '.card3', '.card3', '.card3', '.tab98:nth-child(5)', '.game__bar .btn98'], pokeMax: 1, pokeWait: 400 },
   { id: 'bedtime', label: 'Bedtime Story', pokes: ['.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child'], pokeMax: 1, pokeWait: 700 },
   { id: 'story', label: 'My_Story.doc', pokes: ['.hot', '.story__star'], pokeMax: 5, pokeWait: 420, after: '.story__end', finale: true },
 ];
@@ -156,6 +156,86 @@ async function checkOverflow(page, where) {
     return out.slice(0, 12);
   });
   bad.forEach((b) => problems.push(`[${where}] layout: ${b}`));
+}
+
+/** Text below 4.5:1 against its background (WCAG AA).
+    This exists because the toys app once rendered cream-on-white tabs at
+    1.08:1 — its stylesheet didn't load the shared kit, and nothing caught it
+    but a screenshot. */
+async function checkContrast(page, where) {
+  const bad = await page.evaluate(() => {
+    const lum = (c) => {
+      const p = (c.match(/[\d.]+/g) || []).map(Number);
+      const [r, g, b] = p.slice(0, 3).map((v) => {
+        v /= 255;
+        return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+      });
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    };
+    const ratio = (fg, bg) => {
+      const [hi, lo] = [lum(fg), lum(bg)].sort((a, b) => b - a);
+      return (hi + 0.05) / (lo + 0.05);
+    };
+    // Returns null when nothing up the tree actually paints a background —
+    // the colour behind the text then comes from a sibling layer (the painted
+    // wallpaper) and this method simply can't see it.
+    const bgOf = (el) => {
+      let e = el;
+      while (e) {
+        const c = getComputedStyle(e).backgroundColor;
+        if (c && !/rgba\(0, 0, 0, 0\)|transparent/.test(c)) return c;
+        e = e.parentElement;
+      }
+      return null;
+    };
+    const out = [];
+    const seen = new Set();
+    for (const el of document.querySelectorAll('button, a, p, h1, h2, h3, h4, li, span, b, label, legend, td, th')) {
+      // Only count text that is actually content: anything inside an
+      // aria-hidden subtree is decoration (Pip's floating "zzZ") and is
+      // measured, if at all, as part of the picture it decorates.
+      const visibleText = (node) => {
+        let out = '';
+        for (const n of node.childNodes) {
+          if (n.nodeType === 3) out += n.textContent;
+          else if (n.nodeType === 1 && n.getAttribute('aria-hidden') !== 'true') out += visibleText(n);
+        }
+        return out;
+      };
+      const text = visibleText(el).trim();
+      if (!text || el.children.length > 2) continue;
+      const r = el.getBoundingClientRect();
+      if (r.width < 4 || r.height < 4) continue;
+      const cs = getComputedStyle(el);
+      if (cs.visibility === 'hidden' || Number(cs.opacity) < 0.6) continue;
+      if (el.closest('[aria-hidden="true"]')) continue;
+      // text sitting on a picture can't be measured this way
+      let onImage = false;
+      for (let e = el; e; e = e.parentElement) {
+        if (getComputedStyle(e).backgroundImage !== 'none' || e.querySelector(':scope > img')) {
+          onImage = true;
+          break;
+        }
+      }
+      if (onImage) continue;
+      const bg = bgOf(el);
+      // A translucent background means whatever is behind it decides the real
+      // contrast, and that is usually a painted layer we can't sample.
+      if (!bg) continue;
+      const alpha = bg.startsWith('rgba') ? Number((bg.match(/[\d.]+/g) || [])[3] ?? 1) : 1;
+      if (alpha < 0.9) continue;
+      const c = ratio(cs.color, bg);
+      const big = parseFloat(cs.fontSize) >= 24 || (parseFloat(cs.fontSize) >= 18.66 && Number(cs.fontWeight) >= 700);
+      if (c < (big ? 3 : 4.5)) {
+        const key = `${el.tagName}.${el.className?.toString().split(' ')[0]}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        out.push(`${key} "${text.slice(0, 24)}" ${c.toFixed(2)}:1`);
+      }
+    }
+    return out.slice(0, 10);
+  });
+  bad.forEach((b) => problems.push(`[${where}] contrast: ${b}`));
 }
 
 /** Touch targets below 44px are a brief requirement on touch sizes. */
@@ -212,6 +292,7 @@ async function runSize(browser, size) {
   }
   await shot(page, `${where}-1-nursery`);
   await checkOverflow(page, `${where} nursery`);
+  await checkContrast(page, `${where} nursery`);
   if (size.touch) await checkTouchTargets(page, `${where} nursery`);
 
   // poke a few nursery objects (these trigger sound recipes)
@@ -235,6 +316,7 @@ async function runSize(browser, size) {
   await wait(700);
   await shot(page, `${where}-4-os`);
   await checkOverflow(page, `${where} os`);
+  await checkContrast(page, `${where} os`);
   if (size.touch) await checkTouchTargets(page, `${where} os`);
 
   const isPhone = await page.locator('.dreampad').count();
@@ -378,6 +460,7 @@ async function runSize(browser, size) {
       await wait(500);
       await shot(page, `${where}-app-${app.id}`);
       await checkOverflow(page, `${where} ${app.id}`);
+      await checkContrast(page, `${where} ${app.id}`);
       if (size.touch) await checkTouchTargets(page, `${where} ${app.id}`);
       if (app.finale) {
         // the story can end the whole scene: see it through and come back

@@ -91,7 +91,8 @@
 }
 .pc__status {
   font-size: 12px;
-  color: #3f7a4f;
+  /* was #3f7a4f, which came out at 4.00:1 on the window face */
+  color: #2f5c3b;
 }
 .pc__status.is-away {
   color: var(--lo2);

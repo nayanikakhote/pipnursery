@@ -281,3 +281,49 @@ button {
     0 0 8px rgba(244, 201, 107, 1),
     0 0 16px rgba(244, 201, 107, 0.6);
 }
+
+/* ---------- the DreamOS kit ----------
+   Tabs and .mono used to live in apps.css, which only loads when one of the
+   apps that imports it is open. Every other app got unstyled tabs inheriting
+   its own light text colour — cream on white, 1.08:1. Shared chrome belongs
+   in the always-loaded sheet. */
+.mono {
+  font-family: var(--font-mono);
+  font-size: 1.15em;
+}
+
+/* tabs */
+.tabs98 {
+  display: flex;
+  gap: 2px;
+  padding: 0 6px;
+}
+.tab98 {
+  font-family: var(--font-pixel);
+  font-size: 15px;
+  padding: 6px 14px 4px;
+  border: 0;
+  border-radius: 6px 6px 0 0;
+  background: var(--face);
+  color: var(--cocoa);
+  cursor: pointer;
+  box-shadow: inset 2px 2px 0 var(--hi), inset -2px 0 0 var(--lo2);
+  min-height: 34px;
+}
+.tab98[aria-selected='true'] {
+  background: var(--cream);
+  position: relative;
+  top: 2px;
+  font-weight: 600;
+}
+.tab-panel {
+  padding: 16px;
+  border-radius: 4px;
+}
+
+@media (pointer: coarse) {
+  .tab98 {
+    min-height: 44px;
+    padding: 8px 16px 6px;
+  }
+}
