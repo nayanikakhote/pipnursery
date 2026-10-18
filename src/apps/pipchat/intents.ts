@@ -70,6 +70,21 @@ export const INTENTS: Intent[] = [
     }),
   },
   {
+    id: 'food',
+    test: (t) => /(eat|eating|ate|food|hungry|snack|dinner|breakfast|lunch|supper|milk|cake|biscuit|cookie|sweets|drink|taste)/i.test(t),
+    reply: () => ({
+      lines: [
+        pick([
+          "i don't really eat. i am mostly bones and enthusiasm.",
+          'granny owl says i run on warm milk and not sleeping. she is a bit right.',
+          'i tried a biscuit once. it went straight through. we do not talk about it.',
+          'i eat the little hum a music box makes just before the song starts. it is very filling.',
+        ]),
+      ],
+      chips: ['what do you do?', 'any secrets?'],
+    }),
+  },
+  {
     id: 'favourite',
     test: (t) => /\b(favourite|favorite|like best|best thing|love most)\b/i.test(t),
     reply: () => ({
@@ -180,7 +195,19 @@ export const INTENTS: Intent[] = [
     id: 'howareyou',
     test: (t) => /\b(how are you|how'?s it going|you ok|you okay|what'?s up)\b/i.test(t),
     reply: (_m, ctx) => ({
-      lines: [ctx.theme === 'night' ? 'sleepy but busy! the night shift is the good shift.' : 'the sun is visiting! i do not know what to do with myself.'],
+      lines: [
+        ctx.theme === 'night'
+          ? pick([
+              'sleepy but busy! the night shift is the good shift.',
+              'good!! i have delivered four dreams and dropped one. it landed on a cat. the cat is fine.',
+              'a bit tired. in a nice way. like a blanket that has been warmed up.',
+            ])
+          : pick([
+              'the sun is visiting! i do not know what to do with myself.',
+              'awake! at the WRONG time! this is very exciting and slightly wrong.',
+              'daytime me is a completely different baby. louder.',
+            ]),
+      ],
       chips: ['what do you do?'],
     }),
   },
