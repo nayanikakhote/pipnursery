@@ -95,9 +95,9 @@ CODE
   Optional shared guestbook: Supabase
 
 BUILT BY
-  Nayu (Nayanika Khote), during the 48-hour
+  Nayanika Khote, Sarah Puthran, Ashutosh Verma during the 48-hour
   sprint, 17–19 October 2026.
-  Built with Claude Code as a pair.
+
 
 WITH THANKS TO
   Boo, Nibbles, Fern and Granny Owl, who are not
