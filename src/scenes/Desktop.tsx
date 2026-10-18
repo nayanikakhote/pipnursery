@@ -4,6 +4,7 @@ import { useDream, type AppId } from '../store/dreamStore';
 import { APPS, appById, prefetchApps, type AppDef } from '../os/apps';
 import Window from '../os/Window';
 import PixelIcon from '../components/PixelIcon';
+import FileLabel from '../components/FileLabel';
 import Pip from '../components/Pip';
 import { MuteToggle, ThemeToggle, SpeechBubble } from '../components/Controls';
 import { sfx, unlockAudio } from '../audio/audio';
@@ -71,7 +72,9 @@ function DesktopIcon({ app, selected, onSelect }: { app: AppDef; selected: boole
       aria-label={`${app.label}. Double-click or press Enter to open.`}
     >
       <PixelIcon name={app.icon} size={44} />
-      <span className="dicon__label">{app.label}</span>
+      <span className="dicon__label">
+        <FileLabel name={app.label} />
+      </span>
     </button>
   );
 }

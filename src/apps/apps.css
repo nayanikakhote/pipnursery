@@ -120,7 +120,8 @@
 }
 .my-work__item {
   position: relative;
-  word-break: break-word;
+  overflow-wrap: break-word;
+  word-break: normal;
   line-height: 1.2;
   display: grid;
   justify-items: center;

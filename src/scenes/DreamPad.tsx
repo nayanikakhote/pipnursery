@@ -1,8 +1,9 @@
 import { Suspense, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useDream } from '../store/dreamStore';
+import { useDream, type AppId } from '../store/dreamStore';
 import { APPS, appById, prefetchApps } from '../os/apps';
 import PixelIcon from '../components/PixelIcon';
+import FileLabel from '../components/FileLabel';
 import Pip from '../components/Pip';
 import { SpeechBubble, MuteToggle, ThemeToggle } from '../components/Controls';
 import Odometer from '../components/Odometer';
@@ -41,8 +42,13 @@ export default function DreamPad() {
   };
 
   const apps = APPS.filter((a) => a.id !== 'secretfile' || secretUnlocked);
+  // Pip's story and his ID card answer "what is this?" and "who is Pip?", so
+  // they lead. They used to be buried in "everything else", below six project
+  // tiles, on the layout with the least room to scroll.
+  const ABOUT: AppId[] = ['story', 'mypip'];
+  const about = ABOUT.map((id) => apps.find((a) => a.id === id)).filter((a): a is NonNullable<typeof a> => !!a);
   const work = apps.filter((a) => a.group === 'work');
-  const rest = apps.filter((a) => a.group !== 'work');
+  const rest = apps.filter((a) => a.group !== 'work' && !ABOUT.includes(a.id));
 
   return (
     <div className="dreampad">
@@ -86,12 +92,25 @@ export default function DreamPad() {
                     <Pip width="96px" onClick={handlePipClick} badge={secretUnlocked} />
                     <SpeechBubble className="dp-bubble" />
                   </div>
+                  <h2 className="dp-h">about me 🌙</h2>
+                  <div className="dp-grid">
+                    {about.map((a) => (
+                      <button key={a.id} type="button" className="dp-icon" onClick={() => launch(a.id)}>
+                        <PixelIcon name={a.icon} size={44} />
+                        <span>
+                          <FileLabel name={a.label} />
+                        </span>
+                      </button>
+                    ))}
+                  </div>
                   <h2 className="dp-h">my work ✨</h2>
                   <div className="dp-grid">
                     {work.map((a) => (
                       <button key={a.id} type="button" className="dp-icon" onClick={() => launch(a.id)}>
                         <PixelIcon name={a.icon} size={44} />
-                        <span>{a.label}</span>
+                        <span>
+                          <FileLabel name={a.label} />
+                        </span>
                       </button>
                     ))}
                   </div>
@@ -100,7 +119,9 @@ export default function DreamPad() {
                     {rest.map((a) => (
                       <button key={a.id} type="button" className="dp-icon" onClick={() => launch(a.id)}>
                         <PixelIcon name={a.icon} size={40} />
-                        <span>{a.label}</span>
+                        <span>
+                          <FileLabel name={a.label} />
+                        </span>
                       </button>
                     ))}
                     <button

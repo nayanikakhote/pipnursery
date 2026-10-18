@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useDream } from '../store/dreamStore';
 import { WORK } from '../os/apps';
 import PixelIcon from '../components/PixelIcon';
+import FileLabel from '../components/FileLabel';
 import { sfx } from '../audio/audio';
 import './apps.css';
 
@@ -86,7 +87,9 @@ export default function MyPip() {
           {WORK.map((a) => (
             <button key={a.id} type="button" className="my-work__item" onClick={() => { sfx.open(); openApp(a.id); }} title={a.title}>
               <PixelIcon name={a.icon} size={36} />
-              <span>{a.label}</span>
+              <span>
+                <FileLabel name={a.label} />
+              </span>
               {progress[a.id as keyof typeof progress] && <i className="tick" aria-label="explored">★</i>}
             </button>
           ))}
