@@ -19,6 +19,7 @@ export const STICKERS: { id: string; icon: string; sticker?: string; name: strin
   { id: 'project-growth', icon: 'ruler', sticker: 'teddy', name: 'Measurer', hint: 'see every pencil mark' },
   { id: 'project-story', icon: 'diary', sticker: 'moon', name: 'Pip historian', hint: 'read my story' },
   { id: 'egg-secret', icon: 'sleepfile', sticker: 'mouse', name: 'Tickle champion', hint: 'pip is very ticklish…' },
+  { id: 'toy-pip', icon: 'rattle', sticker: 'bow', name: 'P-I-P', hint: 'spell something with my blocks' },
   { id: 'egg-constellation-pip', icon: 'star', sticker: 'star', name: 'A star of your own', hint: 'read my story all the way to the end' },
   { id: 'egg-lantern', icon: 'lantern', sticker: 'lantern', name: 'Dream Lantern', hint: 'light the lamps in the order pip built them' },
   { id: 'egg-secretsong', icon: 'musicbox', sticker: 'note', name: 'Secret song', hint: 'play a lullaby, then light the lamps in a certain order' },

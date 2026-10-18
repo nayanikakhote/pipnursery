@@ -98,6 +98,7 @@ const APP_CHECKS = [
   { id: 'lullaby', label: 'Lullaby.exe', pokes: ['.windkey', '.windkey', '.windkey', '.step', '.chip', '.lab__play'], pokeMax: 3, pokeWait: 260 },
   { id: 'routes', label: 'Dream_Routes.map', pokes: ['.roof', '.dr__deliver', '.roof', '.dr__deliver', '.roof', '.dr__deliver'], pokeMax: 1, pokeWait: 2100 },
   { id: 'nightlights', label: 'Nightlights', pokes: ['.lamp__btn', '.swatch', '.card__more', '.nl__controls .btn98'], pokeMax: 3, pokeWait: 260 },
+  { id: 'toys', label: 'Rattle & Blocks', pokes: ['.rattle__btn', '.rattle__btn', '.rattle__btn', '.tab98:nth-child(2)', '.bblock--tray', '.bcol', '.bblock--tray', '.bcol', '.bblock--tray', '.bcol', '.toys__controls .btn98'], pokeMax: 1, pokeWait: 300 },
   { id: 'bedtime', label: 'Bedtime Story', pokes: ['.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child'], pokeMax: 1, pokeWait: 700 },
   { id: 'story', label: 'My_Story.doc', pokes: ['.hot', '.story__star'], pokeMax: 5, pokeWait: 420, after: '.story__end', finale: true },
 ];
@@ -165,8 +166,11 @@ async function checkTouchTargets(page, where) {
       const after = getComputedStyle(el, '::after');
       const aw = parseFloat(after.width) || 0;
       const ah = parseFloat(after.height) || 0;
-      if (Math.max(r.width, aw) >= 44 && Math.max(r.height, ah) >= 44) continue;
-      if (r.height < 44 || r.width < 44) {
+      // half a pixel of slack: a 44px box in a fractional grid column measures
+      // 43.98, which is a rounding artefact rather than a design failure
+      const MIN = 43.5;
+      if (Math.max(r.width, aw) >= MIN && Math.max(r.height, ah) >= MIN) continue;
+      if (r.height < MIN || r.width < MIN) {
         out.push(`${el.tagName.toLowerCase()}.${el.className?.toString().split(' ')[0] || '?'} ${Math.round(r.width)}×${Math.round(r.height)}`);
       }
     }
@@ -304,9 +308,12 @@ async function runSize(browser, size) {
     try {
       await openApp(page, app.label, isPhone, size);
       await wait(600);
+      // Scope every poke to this app's own window — other windows are open
+      // behind it and share class names like .tab98 and .btn98.
+      const scope = isPhone ? page.locator('.dp-app') : page.locator(`[aria-labelledby="wt-${app.id}"]`);
       const seen = new Map();
       for (const sel of app.pokes ?? []) {
-        const els = page.locator(sel);
+        const els = scope.locator(sel);
         const count = await els.count();
         if (!count) continue;
         if (app.pokeMax === 1) {
@@ -324,7 +331,7 @@ async function runSize(browser, size) {
         }
       }
       if (app.after) {
-        const el = page.locator(app.after).first();
+        const el = scope.locator(app.after).first();
         if (await el.count()) {
           await shot(page, `${where}-app-${app.id}`);
           await el.click();
