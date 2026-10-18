@@ -15,7 +15,6 @@ export interface AppDef {
 }
 
 const MyPip = lazy(() => import('../apps/MyPip'));
-const Placeholder = lazy(() => import('../apps/Placeholder'));
 const DevNotes = lazy(() => import('../apps/TextFiles').then((m) => ({ default: m.DevNotes })));
 const Credits = lazy(() => import('../apps/TextFiles').then((m) => ({ default: m.Credits })));
 const LostSocks = lazy(() => import('../apps/TextFiles').then((m) => ({ default: m.LostSocks })));
@@ -30,6 +29,8 @@ const RattleAndBlocks = lazy(() => import('../apps/RattleAndBlocks'));
 const GrowthChart = lazy(() => import('../apps/GrowthChart'));
 const DreamWishes = lazy(() => import('../apps/DreamWishes'));
 const PipChat = lazy(() => import('../apps/PipChat'));
+const Gravity = lazy(() => import('../apps/DesktopToys').then((m) => ({ default: m.Gravity })));
+const LanternApp = lazy(() => import('../apps/DesktopToys').then((m) => ({ default: m.Lantern })));
 
 export const APPS: AppDef[] = [
   { id: 'mypip', title: 'My Pip — employee file', label: 'My Pip', icon: 'idcard', group: 'me', w: 580, h: 640, component: MyPip },
@@ -45,8 +46,8 @@ export const APPS: AppDef[] = [
   { id: 'bedtime', title: 'Bedtime_Story.book', label: 'Bedtime Story', icon: 'book', group: 'work', w: 700, h: 680, component: BedtimeStorybook },
   { id: 'growth', title: 'Growth_Chart.png', label: 'Growth Chart', icon: 'ruler', group: 'work', w: 520, h: 660, component: GrowthChart },
 
-  { id: 'lantern', title: 'Lantern.exe', label: 'Lantern.exe', icon: 'lantern', group: 'fun', w: 400, h: 300, component: Placeholder },
-  { id: 'gravity', title: 'Gravity.exe', label: 'Gravity.exe', icon: 'star', group: 'fun', w: 400, h: 300, component: Placeholder },
+  { id: 'lantern', title: 'Lantern.exe', label: 'Lantern.exe', icon: 'lantern', group: 'fun', w: 420, h: 340, component: LanternApp },
+  { id: 'gravity', title: 'Gravity.exe', label: 'Gravity.exe', icon: 'star', group: 'fun', w: 420, h: 330, component: Gravity },
   { id: 'socks', title: 'Lost Socks', label: 'Lost Socks', icon: 'basket', group: 'files', w: 420, h: 380, component: LostSocks },
   { id: 'devnotes', title: 'PIP_DEV_NOTES.txt — Notepad', label: 'PIP_DEV_NOTES.txt', icon: 'notepad', group: 'files', w: 480, h: 480, component: DevNotes },
   { id: 'credits', title: 'Credits.txt — Notepad', label: 'Credits.txt', icon: 'scroll', group: 'files', w: 480, h: 520, component: Credits },

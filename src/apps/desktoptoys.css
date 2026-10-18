@@ -1,0 +1,48 @@
+/* Gravity.exe and Lantern.exe: the window is just the switch. */
+
+.dtoy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 18px;
+  min-height: 100%;
+  text-align: center;
+  background: linear-gradient(180deg, #332f57, #4a4172);
+  color: var(--cream);
+}
+[data-theme='sunrise'] .dtoy {
+  background: linear-gradient(180deg, #5f537c, #8d7ca6);
+}
+.dtoy h3 {
+  margin: 0;
+  font-family: var(--font-pixel);
+  font-size: 20px;
+  color: var(--gold);
+}
+.dtoy p {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 34ch;
+}
+.dtoy__small {
+  font-family: var(--font-pixel) !important;
+  font-size: 13px !important;
+  opacity: 0.8;
+}
+.dtoy__big {
+  min-height: 56px;
+  min-width: 200px;
+  font-size: 18px;
+  font-weight: 600;
+}
+.dtoy__big.is-on {
+  background: linear-gradient(135deg, #f6e2b6, #efc6d2);
+  box-shadow:
+    inset 2px 2px 0 var(--lo),
+    inset -2px -2px 0 var(--hi),
+    0 0 18px rgba(244, 201, 107, 0.6);
+}

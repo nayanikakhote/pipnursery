@@ -87,6 +87,8 @@ interface DreamState {
   toggleMax: (id: AppId) => void;
   moveApp: (id: AppId, x: number, y: number) => void;
   closeAll: () => void;
+  /** Lay the open windows out in a neat cascade again. */
+  tileWindows: (bounds: { w: number; h: number }) => void;
   setStartOpen: (v: boolean) => void;
   setSound: (v: boolean) => void;
   toggleTheme: () => void;
@@ -177,6 +179,16 @@ export const useDream = create<DreamState>()(
       moveApp: (id, x, y) =>
         set({ windows: get().windows.map((w) => (w.id === id ? { ...w, x, y } : w)) }),
       closeAll: () => set({ windows: [] }),
+      tileWindows: (bounds) =>
+        set({
+          windows: get().windows.map((w, i) => ({
+            ...w,
+            min: false,
+            max: false,
+            x: Math.max(8, Math.min(40 + i * 34, bounds.w - 220)),
+            y: Math.max(8, Math.min(30 + i * 30, bounds.h - 140)),
+          })),
+        }),
       setStartOpen: (startOpen) => set({ startOpen }),
 
       setSound: (soundOn) => set({ soundOn }),

@@ -126,7 +126,15 @@ export default function Pip({ width, onClick, label = 'Pip', mood: moodProp, cla
     </span>
   ) : (
       <span className="pip__body">
-        <img src={asset('assets/pip-base.webp')} alt={onClick ? '' : 'Pip, a cute baby with a round skull face and a starry nightcap'} draggable={false} />
+        {/* fetchPriority rather than a <link rel="preload">: a returning visitor
+            whose story is finished sees a drawn pose instead, and the unused
+            preload logged a console warning every time. */}
+        <img
+          src={asset('assets/pip-base.webp')}
+          alt={onClick ? '' : 'Pip, a cute baby with a round skull face and a starry nightcap'}
+          draggable={false}
+          fetchPriority="high"
+        />
         {SOCKETS.map((s, i) => (
           <span
             key={i}

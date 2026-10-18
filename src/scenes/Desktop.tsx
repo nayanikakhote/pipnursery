@@ -13,11 +13,33 @@ import { handlePipClick } from './Nursery';
 import type { Mode } from '../hooks/useMode';
 import Odometer from '../components/Odometer';
 import { ART } from '../content/assets';
+import ErrorCascade from '../os/ErrorCascade';
+import LanternLayer from '../os/LanternLayer';
 import './desktop.css';
 
 export function launch(id: AppId) {
   const st = useDream.getState();
   unlockAudio();
+
+  // do_not_wake_pip.txt doesn't open a window. The desktop folds sideways for
+  // 700ms — offset colours, titles scrambling to stars, no strobing — and
+  // then you're somewhere else entirely.
+  if (id === 'secretfile') {
+    sfx.static();
+    st.say('…you really did open it.');
+    document.documentElement.classList.add('is-shifting');
+    const veil = document.createElement('div');
+    veil.className = 'dream-shift';
+    document.body.appendChild(veil);
+    const ms = st.reducedMotion ? 200 : 700;
+    window.setTimeout(() => {
+      document.documentElement.classList.remove('is-shifting');
+      veil.remove();
+      useDream.getState().setScene('secret');
+    }, ms);
+    return;
+  }
+
   sfx.open();
   st.openApp(id);
   const hello = appHello[id];
@@ -154,6 +176,9 @@ export default function Desktop({ mode }: { mode: Mode }) {
   const say = useDream((s) => s.say);
   const theme = useDream((s) => s.theme);
   const paper = theme === 'night' ? ART.wallpaperNight : ART.wallpaperSunrise;
+  const gravity = useDream((s) => !!s.flags['fx:gravity']);
+  const lantern = useDream((s) => !!s.flags['fx:lantern']);
+  const tileWindows = useDream((s) => s.tileWindows);
   const [selected, setSelected] = useState<AppId | null>(null);
   const areaRef = useRef<HTMLDivElement>(null);
   const [bounds, setBounds] = useState({ w: 1024, h: 700 });
@@ -201,7 +226,7 @@ export default function Desktop({ mode }: { mode: Mode }) {
   };
 
   return (
-    <div className="desktop" onPointerDown={(e) => { if (e.target === e.currentTarget) setSelected(null); }}>
+    <div className={`desktop ${gravity ? "is-gravity" : ""} ${lantern ? "is-lantern" : ""}`} onPointerDown={(e) => { if (e.target === e.currentTarget) setSelected(null); }}>
       <div className="wallpaper" aria-hidden="true">
         {paper && <img className="wallpaper__art" src={paper} alt="" />}
         <div className="wallpaper__stars" />
@@ -240,6 +265,9 @@ export default function Desktop({ mode }: { mode: Mode }) {
           ))}
         </AnimatePresence>
       </div>
+
+      <ErrorCascade onTidy={() => tileWindows(bounds)} />
+      {lantern && <LanternLayer />}
 
       {startOpen && <StartMenu onClose={() => setStartOpen(false)} />}
 

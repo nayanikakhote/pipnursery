@@ -13,6 +13,7 @@ import Boot, { ShutDown } from './scenes/Boot';
 import Desktop from './scenes/Desktop';
 import DreamPad from './scenes/DreamPad';
 import Finale from './scenes/Finale';
+import SecretRoom from './scenes/SecretRoom';
 import './scenes/desktop.css';
 
 const TRANSIENT: Partial<Record<PipMood, number>> = {
@@ -171,6 +172,7 @@ export default function App() {
           {scene === 'booting' && <Boot />}
           {scene === 'desktop' && osScene}
           {scene === 'finale' && <Finale />}
+          {scene === 'secret' && <SecretRoom />}
           {scene === 'shutdown' && <ShutDown />}
         </motion.main>
       </AnimatePresence>

@@ -371,6 +371,15 @@ async function runSize(browser, size) {
         await wait(350);
       }
     }
+    // the fourth open window sets off DreamOS's "too many dreams" cascade
+    if (await page.locator('.cascade').count()) {
+      await wait(600);
+      await shot(page, `${where}-7-cascade`);
+      await checkOverflow(page, `${where} cascade`);
+      await page.waitForSelector('.cascade', { state: 'detached', timeout: 8000 });
+    } else {
+      problems.push(`[${where}] the error cascade never fired with four windows open`);
+    }
     await wait(500);
     await shot(page, `${where}-7-stacked`);
     await checkOverflow(page, `${where} stacked`);
@@ -488,6 +497,82 @@ async function runSize(browser, size) {
     } catch (e) {
       problems.push(`[${where}] app ${app.id}: ${e.message}`);
       await closeApp(page, isPhone).catch(() => {});
+    }
+  }
+
+  // ---- the desktop toys and the big egg (desktop/tablet shells only) ----
+  if (!isPhone) {
+    try {
+      // Gravity.exe
+      await openApp(page, 'Gravity.exe', isPhone, size);
+      await page.locator('.dtoy__big').click();
+      await wait(1400);
+      await shot(page, `${where}-gravity`);
+      await checkOverflow(page, `${where} gravity`);
+      await page.locator('.dtoy__big').click();
+      await wait(500);
+      await closeApp(page, isPhone);
+      await wait(300);
+
+      // Lantern.exe
+      await openApp(page, 'Lantern.exe', isPhone, size);
+      await page.locator('.dtoy__big').click();
+      await page.waitForSelector('.lantern-layer', { timeout: 5000 });
+      await page.mouse.move(size.width * 0.5, size.height * 0.5);
+      await wait(400);
+      const spots = page.locator('.lspot--star');
+      const n = await spots.count();
+      for (let i = 0; i < n; i++) {
+        await spots.nth(i).click({ force: true });
+        await wait(140);
+      }
+      await page.locator('.lspot--note').first().click({ force: true });
+      await wait(400);
+      await shot(page, `${where}-lantern`);
+      await checkOverflow(page, `${where} lantern`);
+      await page.locator('.lantern-layer__out').click();
+      await wait(400);
+      await closeApp(page, isPhone);
+      await wait(300);
+
+      // close whatever is still open before the egg
+      for (let i = 0; i < 5; i++) {
+        await page.keyboard.press('Escape');
+        await wait(150);
+      }
+
+      // egg 1: the secret file, which is only on the desktop once unlocked
+      await page.evaluate(() => {
+        const s = JSON.parse(localStorage.getItem('pip-midnight-nursery') || '{}');
+        s.state = { ...(s.state || {}), secretUnlocked: true };
+        localStorage.setItem('pip-midnight-nursery', JSON.stringify(s));
+      });
+      await page.reload({ waitUntil: 'networkidle' });
+      await wait(700);
+      if (await page.locator('.crt').count()) {
+        await page.locator('.crt').click();
+        await wait(1200);
+        await page.mouse.click(size.width / 2, size.height / 2);
+        await page.waitForFunction(() => !!document.querySelector('.desktop'), null, { timeout: 15000 });
+        await wait(600);
+      }
+      const secretIcon = page.locator('.dicon', { hasText: 'do_not_wake_pip' }).first();
+      if (await secretIcon.count()) {
+        await secretIcon.focus();
+        await page.keyboard.press('Enter');
+        await page.waitForSelector('.secret', { timeout: 8000 });
+        await wait(1200);
+        await shot(page, `${where}-secretroom`);
+        await checkOverflow(page, `${where} secret room`);
+        await checkContrast(page, `${where} secret room`);
+        await page.locator('.secret__back').click();
+        await page.waitForSelector('.desktop', { timeout: 8000 });
+        await wait(400);
+      } else {
+        problems.push(`[${where}] do_not_wake_pip.txt never appeared after unlocking`);
+      }
+    } catch (e) {
+      problems.push(`[${where}] desktop toys: ${e.message}`);
     }
   }
 
