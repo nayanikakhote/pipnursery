@@ -297,3 +297,10 @@
   font-size: 28px;
   color: var(--lavender);
 }
+
+@media (pointer: coarse) {
+  .tab98 {
+    min-height: 44px;
+    padding: 8px 16px 6px;
+  }
+}

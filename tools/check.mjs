@@ -98,6 +98,7 @@ const APP_CHECKS = [
   { id: 'lullaby', label: 'Lullaby.exe', pokes: ['.windkey', '.windkey', '.windkey', '.step', '.chip', '.lab__play'], pokeMax: 3, pokeWait: 260 },
   { id: 'routes', label: 'Dream_Routes.map', pokes: ['.roof', '.dr__deliver', '.roof', '.dr__deliver', '.roof', '.dr__deliver'], pokeMax: 1, pokeWait: 2100 },
   { id: 'nightlights', label: 'Nightlights', pokes: ['.lamp__btn', '.swatch', '.card__more', '.nl__controls .btn98'], pokeMax: 3, pokeWait: 260 },
+  { id: 'story', label: 'My_Story.doc', pokes: ['.hot', '.story__star'], pokeMax: 5, pokeWait: 420, after: '.story__end', finale: true },
 ];
 
 /** Open an app by its icon/tile label, on either shell. */
@@ -159,6 +160,11 @@ async function checkTouchTargets(page, where) {
       if (s.visibility === 'hidden' || s.opacity === '0' || s.pointerEvents === 'none') continue;
       // hidden-star eggs and decorative hotspots are deliberately tiny
       if (el.classList.contains('hidden-star') || el.dataset.tiny === '1') continue;
+      // a button may push its hit area out with an ::after overlay
+      const after = getComputedStyle(el, '::after');
+      const aw = parseFloat(after.width) || 0;
+      const ah = parseFloat(after.height) || 0;
+      if (Math.max(r.width, aw) >= 44 && Math.max(r.height, ah) >= 44) continue;
       if (r.height < 44 || r.width < 44) {
         out.push(`${el.tagName.toLowerCase()}.${el.className?.toString().split(' ')[0] || '?'} ${Math.round(r.width)}×${Math.round(r.height)}`);
       }
@@ -316,6 +322,16 @@ async function runSize(browser, size) {
           await wait(app.pokeWait ?? 180);
         }
       }
+      if (app.after) {
+        const el = page.locator(app.after).first();
+        if (await el.count()) {
+          await shot(page, `${where}-app-${app.id}`);
+          await el.click();
+          await wait(700);
+        } else {
+          problems.push(`[${where}] ${app.id}: "${app.after}" never appeared`);
+        }
+      }
       // poking often scrolls the app body; show the top of it in the shot
       await page.evaluate(() => {
         document.querySelectorAll('.win98__body, .dp-app__body').forEach((el) => (el.scrollTop = 0));
@@ -324,6 +340,27 @@ async function runSize(browser, size) {
       await shot(page, `${where}-app-${app.id}`);
       await checkOverflow(page, `${where} ${app.id}`);
       if (size.touch) await checkTouchTargets(page, `${where} ${app.id}`);
+      if (app.finale) {
+        // the story can end the whole scene: see it through and come back
+        const home = page.locator('.finale__home, .finale__skip').first();
+        if (await home.count()) {
+          await page.locator('.finale__skip').first().click().catch(() => {});
+          await wait(900);
+          await shot(page, `${where}-finale`);
+          await checkOverflow(page, `${where} finale`);
+          await page.locator('.finale__home').first().click();
+          await page.waitForSelector('.nursery-scene', { timeout: 8000 });
+          await wait(600);
+          await shot(page, `${where}-nursery-bedtime`);
+          await checkOverflow(page, `${where} nursery after story`);
+          await page.locator('.crt').click();
+          await wait(900);
+          await page.mouse.click(size.width / 2, size.height / 2);
+          await page.waitForFunction(() => !!document.querySelector('.desktop, .dreampad'), null, { timeout: 15000 });
+          await wait(600);
+          continue;
+        }
+      }
       await closeApp(page, isPhone);
       await wait(350);
     } catch (e) {

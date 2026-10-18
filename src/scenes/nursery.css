@@ -891,3 +891,51 @@
     z-index: 0;
   }
 }
+
+/* ---------- after the story: the room is put to bed ---------- */
+.nursery-scene.is-bedtime .room__wall,
+.nursery-scene.is-bedtime .room-img {
+  filter: brightness(0.78) saturate(0.92);
+}
+.nursery-scene.is-bedtime .crt__screen {
+  filter: brightness(0.5);
+}
+.pip-tuck {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.pip-tuck:focus-visible {
+  outline: 3px dotted var(--gold);
+  outline-offset: 4px;
+}
+.ceiling-stars {
+  position: absolute;
+  inset: 0 0 55% 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle, rgba(244, 201, 107, 0.95) 0 1.4px, transparent 1.6px),
+    radial-gradient(circle, rgba(255, 248, 241, 0.75) 0 1px, transparent 1.2px);
+  background-size:
+    74px 58px,
+    47px 39px;
+  background-position:
+    0 0,
+    23px 17px;
+  animation: ceiling-twinkle 5s ease-in-out infinite;
+}
+@keyframes ceiling-twinkle {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+[data-motion='reduced'] .ceiling-stars {
+  animation: none;
+}

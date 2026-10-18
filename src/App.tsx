@@ -11,6 +11,7 @@ import Nursery from './scenes/Nursery';
 import Boot, { ShutDown } from './scenes/Boot';
 import Desktop from './scenes/Desktop';
 import DreamPad from './scenes/DreamPad';
+import Finale from './scenes/Finale';
 import './scenes/desktop.css';
 
 const TRANSIENT: Partial<Record<PipMood, number>> = {
@@ -73,7 +74,10 @@ export default function App() {
     const onInput = () => {
       lastInput.current = performance.now();
       const st = useDream.getState();
-      if (st.mood === 'asleep') {
+      // Once the story has been read Pip is asleep in his room on purpose —
+      // don't keep startling him awake every time the mouse moves.
+      const tuckedIn = st.scene === 'nursery' && st.progress.story;
+      if (st.mood === 'asleep' && !tuckedIn) {
         st.setMood('whoa');
         st.say(lines.wake);
       }
@@ -84,6 +88,7 @@ export default function App() {
       const st = useDream.getState();
       const idle = performance.now() - lastInput.current;
       if (st.scene !== 'nursery' && st.scene !== 'desktop') return;
+      if (st.scene === 'nursery' && st.progress.story) return;
       if (idle > 45000 && st.mood !== 'asleep') st.setMood('asleep');
       else if (idle > 20000 && idle < 21500 && (st.mood === 'idle' || st.mood === 'pout')) {
         st.setMood('yawn');
@@ -154,6 +159,7 @@ export default function App() {
           {(scene === 'nursery' || scene === 'zooming') && <Nursery />}
           {scene === 'booting' && <Boot />}
           {scene === 'desktop' && osScene}
+          {scene === 'finale' && <Finale />}
           {scene === 'shutdown' && <ShutDown />}
         </motion.main>
       </AnimatePresence>

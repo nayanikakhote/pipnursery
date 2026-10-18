@@ -24,10 +24,11 @@ const Stickers = lazy(() => import('../apps/Stickers'));
 const LullabyLab = lazy(() => import('../apps/LullabyLab'));
 const Nightlights = lazy(() => import('../apps/Nightlights'));
 const DreamRoutes = lazy(() => import('../apps/DreamRoutes'));
+const MyStory = lazy(() => import('../apps/MyStory'));
 
 export const APPS: AppDef[] = [
   { id: 'mypip', title: 'My Pip — employee file', label: 'My Pip', icon: 'idcard', group: 'me', w: 580, h: 640, component: MyPip },
-  { id: 'story', title: 'My_Story.doc', label: 'My_Story.doc', icon: 'diary', group: 'me', w: 720, h: 600, component: Placeholder },
+  { id: 'story', title: 'My_Story.doc', label: 'My_Story.doc', icon: 'diary', group: 'me', w: 820, h: 620, component: MyStory },
   { id: 'wishes', title: 'Dream Wishes — guestbook', label: 'Dream Wishes', icon: 'guestbook', group: 'me', w: 560, h: 600, component: Placeholder },
   { id: 'chat', title: 'PipChat.exe', label: 'PipChat.exe', icon: 'chat', group: 'me', w: 460, h: 560, component: Placeholder },
   { id: 'stickers', title: 'Sticker Album', label: 'Stickers', icon: 'album', group: 'me', w: 520, h: 520, component: Stickers },

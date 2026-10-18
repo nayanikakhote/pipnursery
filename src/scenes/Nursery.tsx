@@ -106,7 +106,7 @@ export default function Nursery() {
     : undefined;
 
   return (
-    <div className={`nursery-scene ${progress.nightlights ? 'is-lit' : ''}`}>
+    <div className={`nursery-scene ${progress.nightlights ? 'is-lit' : ''} ${progress.story ? 'is-bedtime' : ''}`}>
       <motion.div
         className="nursery-zoom"
         style={{ transformOrigin: origin }}
@@ -310,9 +310,21 @@ export default function Nursery() {
             </button>
           )}
 
-          {/* Pip */}
+          {/* Pip. Once the story has been read he is asleep under the stars,
+              and clicking only gets a sleepy wriggle. */}
           <div className="nursery-pip">
-            <Pip width="100%" onClick={handlePipClick} badge={secretUnlocked} />
+            <Pip width="100%" onClick={progress.story ? undefined : handlePipClick} mood={progress.story ? 'asleep' : undefined} badge={secretUnlocked} />
+            {progress.story && (
+              <button
+                type="button"
+                className="pip-tuck"
+                aria-label="Pip is asleep. Tuck him in."
+                onClick={() => {
+                  sfx.pop();
+                  say('mmh… five more minutes…');
+                }}
+              />
+            )}
           </div>
           <SpeechBubble className="nursery-bubble" />
 
@@ -342,6 +354,7 @@ export default function Nursery() {
             </svg>
           )}
           {progress.routes && <div className="wall-stars" aria-hidden="true" />}
+          {progress.story && <div className="ceiling-stars" aria-hidden="true" />}
         </div>
       </motion.div>
 

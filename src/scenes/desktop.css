@@ -621,9 +621,29 @@
   .task-tab {
     min-height: 44px;
   }
+  /* Window chrome on a touch screen. The buttons stay Win98-small to look at,
+     but each one's hit area is pushed out to 44px with a pseudo-element, so a
+     thumb can land on it without the title bar turning into a toolbar. */
+  .win98__title {
+    min-height: 44px;
+    padding: 4px 6px 4px 10px;
+  }
   .win98__btn {
-    min-width: 32px;
-    min-height: 30px;
+    min-width: 34px;
+    min-height: 32px;
+    position: relative;
+  }
+  .win98__btn::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 44px;
+    height: 44px;
+    transform: translate(-50%, -50%);
+  }
+  .tab98 {
+    min-height: 44px;
   }
 }
 
