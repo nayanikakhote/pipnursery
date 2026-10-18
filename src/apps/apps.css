@@ -141,6 +141,7 @@
 }
 .my-work {
   margin-top: 12px;
+  padding-bottom: 8px;
 }
 .my-work__label {
   font-family: var(--font-pixel);
@@ -153,6 +154,8 @@
 }
 .my-work__item {
   position: relative;
+  word-break: break-word;
+  line-height: 1.2;
   display: grid;
   justify-items: center;
   gap: 4px;

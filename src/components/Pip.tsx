@@ -3,7 +3,29 @@ import { useEffect, useRef } from 'react';
 import { pointer, lookTarget } from '../lib/pointer';
 import { useDream, type PipMood } from '../store/dreamStore';
 import { asset } from '../lib/asset';
+import { art } from '../content/assets';
 import './pip.css';
+
+// Some moods were drawn as whole poses. Where one exists Pip wears the pose
+// instead of the base face plus CSS overlays, and the live eyes stand down —
+// the drawing already has the expression in it.
+const POSES: Partial<Record<PipMood, string | undefined>> = {
+  asleep: art('pip-asleep'),
+  yawn: art('pip-yawn'),
+  cheer: art('pip-cheer'),
+  pout: art('pip-pout'),
+  sneeze: art('pip-sneeze'),
+  whoa: art('pip-whoa'),
+};
+
+const POSE_ALT: Partial<Record<PipMood, string>> = {
+  asleep: 'Pip fast asleep on a cloud',
+  yawn: 'Pip having a big yawn',
+  cheer: 'Pip cheering with both arms up',
+  pout: 'Pip sulking in earmuffs',
+  sneeze: 'Pip sneezing into a tissue',
+  whoa: 'Pip looking very surprised',
+};
 
 // Eye socket geometry measured on /assets/pip-base.webp (585 × 778).
 const W = 585;
@@ -88,11 +110,21 @@ export default function Pip({ width, onClick, label = 'Pip', mood: moodProp, cla
   }, []);
 
   const soundOn = useDream((s) => s.soundOn);
+  const pose = POSES[mood];
   const sleepy = theme === 'night' && mood === 'idle';
-  const cls = `pip pip--${mood} ${sleepy ? 'pip--sleepy' : ''} ${soundOn ? '' : 'muted'} ${className}`;
+  const cls = `pip pip--${mood} ${pose ? 'pip--posed' : ''} ${sleepy ? 'pip--sleepy' : ''} ${soundOn ? '' : 'muted'} ${className}`;
   const style = { width, aspectRatio: `${W} / ${H}` };
 
-  const inner = (
+  const inner = pose ? (
+    <span className="pip__body">
+      <img className="pip__pose" src={pose} alt={onClick ? '' : (POSE_ALT[mood] ?? 'Pip')} draggable={false} />
+      {badge && (
+        <span className="pip__badge" aria-hidden="true">
+          ★
+        </span>
+      )}
+    </span>
+  ) : (
       <span className="pip__body">
         <img src={asset('assets/pip-base.webp')} alt={onClick ? '' : 'Pip, a cute baby with a round skull face and a starry nightcap'} draggable={false} />
         {SOCKETS.map((s, i) => (

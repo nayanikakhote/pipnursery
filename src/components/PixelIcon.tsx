@@ -1,5 +1,6 @@
 import type React from 'react';
 import { memo } from 'react';
+import { art } from '../content/assets';
 
 // Hand-made pixel art. Each map is a grid of characters; each character is a
 // palette colour ('.' = transparent). Rendered as crisp SVG rects.
@@ -291,7 +292,32 @@ interface Props {
   title?: string;
 }
 
+// Pip drew a matching icon sheet; where a drawn icon exists it wins, and the
+// hand-made pixel maps below stay as the fallback (and still do the UI
+// toggles, which have no drawn version).
+const DRAWN_NAME: Record<string, string> = {
+  diary: 'stardiary',
+  book: 'moonbook',
+  album: 'chest',
+};
+
 function PixelIconBase({ name, size = 48 }: Props) {
+  const drawn = art(`icon-${DRAWN_NAME[name] ?? name}`);
+  if (drawn) {
+    return (
+      <img
+        className="pixel-icon pixel-icon--drawn"
+        src={drawn}
+        width={size}
+        height={size}
+        alt=""
+        aria-hidden="true"
+        draggable={false}
+        loading="lazy"
+        decoding="async"
+      />
+    );
+  }
   const map = ICONS[name] ?? ICONS.star;
   const w = Math.max(...map.map((r) => r.length));
   const h = map.length;

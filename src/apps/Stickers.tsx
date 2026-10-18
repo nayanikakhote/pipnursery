@@ -1,21 +1,30 @@
 import { useDream } from '../store/dreamStore';
 import PixelIcon from '../components/PixelIcon';
+import { art } from '../content/assets';
 import './apps.css';
 
-export const STICKERS: { id: string; icon: string; name: string; hint: string }[] = [
-  { id: 'project-lullaby', icon: 'musicbox', name: 'Lullaby maker', hint: 'play a whole lullaby' },
-  { id: 'project-nightlights', icon: 'lampfolder', name: 'Light bringer', hint: 'switch on every nightlight' },
-  { id: 'project-routes', icon: 'map', name: 'Dream courier', hint: 'deliver all the dreams' },
-  { id: 'project-toys', icon: 'rattle', name: 'Toy tester', hint: 'start a rattle band' },
-  { id: 'project-bedtime', icon: 'book', name: 'Story listener', hint: 'read to the very end' },
-  { id: 'project-growth', icon: 'ruler', name: 'Measurer', hint: 'see every pencil mark' },
-  { id: 'project-story', icon: 'diary', name: 'Pip historian', hint: 'read my story' },
-  { id: 'egg-secret', icon: 'sleepfile', name: 'Tickle champion', hint: 'pip is very ticklish…' },
-  { id: 'egg-constellation', icon: 'star', name: 'Star finder', hint: 'tiny stars hide in my room' },
-  { id: 'egg-devnotes', icon: 'notepad', name: 'Snoop', hint: 'read my private notes' },
+/** A sticker you can actually peel off Pip's sheet, if one was drawn for it. */
+export function StickerArt({ sticker, icon, size = 40 }: { sticker?: string; icon: string; size?: number }) {
+  const drawn = sticker && art(`sticker-${sticker}`);
+  if (drawn) return <img className="sticker__art" src={drawn} alt="" aria-hidden="true" width={size} height={size} draggable={false} loading="lazy" />;
+  return <PixelIcon name={icon} size={size} />;
+}
+
+export const STICKERS: { id: string; icon: string; sticker?: string; name: string; hint: string }[] = [
+  { id: 'project-lullaby', icon: 'musicbox', sticker: 'note', name: 'Lullaby maker', hint: 'play a whole lullaby' },
+  { id: 'project-nightlights', icon: 'lampfolder', sticker: 'lantern', name: 'Light bringer', hint: 'switch on every nightlight' },
+  { id: 'project-routes', icon: 'map', sticker: 'cloud', name: 'Dream courier', hint: 'deliver all the dreams' },
+  { id: 'project-toys', icon: 'rattle', sticker: 'bow', name: 'Toy tester', hint: 'start a rattle band' },
+  { id: 'project-bedtime', icon: 'book', sticker: 'ghost', name: 'Story listener', hint: 'read to the very end' },
+  { id: 'project-growth', icon: 'ruler', sticker: 'teddy', name: 'Measurer', hint: 'see every pencil mark' },
+  { id: 'project-story', icon: 'diary', sticker: 'moon', name: 'Pip historian', hint: 'read my story' },
+  { id: 'egg-secret', icon: 'sleepfile', sticker: 'mouse', name: 'Tickle champion', hint: 'pip is very ticklish…' },
+  { id: 'egg-teddy', icon: 'star', sticker: 'teddy', name: 'Teddy whisperer', hint: 'the teddy likes being squeezed' },
+  { id: 'egg-constellation', icon: 'star', sticker: 'star', name: 'Star finder', hint: 'tiny stars hide in my room' },
+  { id: 'egg-devnotes', icon: 'notepad', sticker: 'sock', name: 'Snoop', hint: 'read my private notes' },
   { id: 'egg-shutdown', icon: 'moon', name: 'Night night', hint: 'tuck the computer in' },
-  { id: 'egg-giggle', icon: 'chat', name: 'Giggle storm', hint: 'an old secret code…' },
-  { id: 'egg-secretfile', icon: 'sun', name: 'First dream', hint: 'open a file you should not' },
+  { id: 'egg-giggle', icon: 'chat', sticker: 'frog', name: 'Giggle storm', hint: 'an old secret code…' },
+  { id: 'egg-secretfile', icon: 'sun', sticker: 'owl', name: 'First dream', hint: 'open a file you should not' },
 ];
 
 export default function Stickers() {
@@ -31,7 +40,7 @@ export default function Stickers() {
           const has = badges.includes(s.id);
           return (
             <li key={s.id} className={`sticker ${has ? 'has' : ''}`}>
-              {has ? <PixelIcon name={s.icon} size={40} /> : <span className="sticker__q">?</span>}
+              {has ? <StickerArt sticker={s.sticker} icon={s.icon} size={40} /> : <span className="sticker__q">?</span>}
               <b>{has ? s.name : '???'}</b>
               {!has && <small>{s.hint}</small>}
             </li>

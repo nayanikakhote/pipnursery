@@ -6,7 +6,7 @@ import { MuteToggle, ThemeToggle, SpeechBubble } from '../components/Controls';
 import { useDream } from '../store/dreamStore';
 import { sfx, unlockAudio, PENTA } from '../audio/audio';
 import { lines, pick } from '../content/copy';
-import { ART } from '../content/assets';
+import { ART, SCREENS, art } from '../content/assets';
 import { asset } from '../lib/asset';
 import './nursery.css';
 
@@ -54,6 +54,7 @@ export default function Nursery() {
   const [lampWarm, setLampWarm] = useState(false);
   const [boxOpen, setBoxOpen] = useState(false);
   const [blocksTumble, setBlocksTumble] = useState(0);
+  const [teddyPats, setTeddyPats] = useState(0);
   const [origin, setOrigin] = useState('70% 60%');
   const greeted = useRef(false);
   const zooming = scene === 'zooming';
@@ -98,6 +99,11 @@ export default function Nursery() {
 
   const allStars = found.length === HIDDEN_STARS.length;
   const room = ART.nurseryWide;
+  const crtArt = ART.crtDesk;
+  const scr = SCREENS['crt-desk'];
+  const crtScreen = scr
+    ? { left: `${scr.left}%`, top: `${scr.top}%`, width: `${scr.width}%`, height: `${scr.height}%` }
+    : undefined;
 
   return (
     <div className={`nursery-scene ${progress.nightlights ? 'is-lit' : ''}`}>
@@ -150,6 +156,9 @@ export default function Nursery() {
               setMobileWobble((n) => n + 1);
             }}
           >
+            {ART.mobile ? (
+              <img key={mobileWobble} className={`mobile__art ${mobileWobble ? 'wobble' : ''}`} src={ART.mobile} alt="" draggable={false} />
+            ) : (
             <svg key={mobileWobble} viewBox="0 0 200 170" className={mobileWobble ? 'wobble' : ''} aria-hidden="true">
               <line x1="100" y1="0" x2="100" y2="34" stroke="#c9b8e8" strokeWidth="2" />
               <rect x="30" y="32" width="140" height="6" rx="3" fill="#b98157" />
@@ -172,31 +181,51 @@ export default function Nursery() {
                 <path d="M160 104 l5 10 11 2 -8 8 2 11 -10 -6 -10 6 2 -11 -8 -8 11 -2z" fill="#EFC6D2" stroke="#d99fb3" strokeWidth="2" />
               </g>
             </svg>
+            )}
           </button>
 
           {/* warm lamp glow */}
           <div className={`lamp-glow ${lampWarm ? 'warm' : ''}`} aria-hidden="true" />
 
-          {/* the CRT computer on its desk */}
-          <button type="button" className={`crt ${hint ? 'crt--hint' : ''}`} onClick={goComputer} aria-label="Pip's computer, open DreamOS">
-            <span className="crt__desk" aria-hidden="true">
-              <span className="crt__leg l" />
-              <span className="crt__leg r" />
-            </span>
-            <span className="crt__monitor" aria-hidden="true">
-              <span className="crt__screen">
-                <span className="crt__text">
-                  DreamOS
-                  <br />
-                  <small>
-                    click me<i className="blink-cursor">_</i>
-                  </small>
+          {/* the CRT computer on its desk. Pip's drawn computer was rendered
+              with a green screen; the live screen sits exactly where the green
+              was, so the zoom origin still lands on the glass. */}
+          <button type="button" className={`crt ${crtArt ? 'crt--art' : ''} ${hint ? 'crt--hint' : ''}`} onClick={goComputer} aria-label="Pip's computer, open DreamOS">
+            {crtArt ? (
+              <>
+                <img className="crt__art" src={crtArt} alt="" draggable={false} />
+                <span className="crt__screen" style={crtScreen} aria-hidden="true">
+                  <span className="crt__text">
+                    DreamOS
+                    <br />
+                    <small>
+                      click me<i className="blink-cursor">_</i>
+                    </small>
+                  </span>
                 </span>
-              </span>
-              <span className="crt__led" />
-            </span>
-            <span className="crt__neck" aria-hidden="true" />
-            <span className="crt__keyboard" aria-hidden="true" />
+              </>
+            ) : (
+              <>
+                <span className="crt__desk" aria-hidden="true">
+                  <span className="crt__leg l" />
+                  <span className="crt__leg r" />
+                </span>
+                <span className="crt__monitor" aria-hidden="true">
+                  <span className="crt__screen">
+                    <span className="crt__text">
+                      DreamOS
+                      <br />
+                      <small>
+                        click me<i className="blink-cursor">_</i>
+                      </small>
+                    </span>
+                  </span>
+                  <span className="crt__led" />
+                </span>
+                <span className="crt__neck" aria-hidden="true" />
+                <span className="crt__keyboard" aria-hidden="true" />
+              </>
+            )}
           </button>
 
           {/* music box */}
@@ -241,11 +270,45 @@ export default function Nursery() {
             }}
           >
             <span key={blocksTumble} className={blocksTumble ? 'tumble' : ''}>
-              <i className="blk b-pink">P</i>
-              <i className="blk b-lav">I</i>
-              <i className="blk b-gold">P</i>
+              {(['pink', 'lilac', 'gold'] as const).map((c, i) => {
+                const face = art(`block-${c}`);
+                return face ? (
+                  <i key={c} className="blk blk--art">
+                    <img src={face} alt="" draggable={false} />
+                    <b>{'PIP'[i]}</b>
+                  </i>
+                ) : (
+                  <i key={c} className={`blk b-${c === 'lilac' ? 'lav' : c}`}>
+                    {'PIP'[i]}
+                  </i>
+                );
+              })}
             </span>
           </button>
+
+          {/* teddy — he is also hiding something (easter egg 3) */}
+          {ART.teddy && (
+            <button
+              type="button"
+              className="obj teddy"
+              aria-label="Pip's teddy, give him a squeeze"
+              onClick={() => {
+                unlockAudio();
+                sfx.pop();
+                const next = teddyPats + 1;
+                setTeddyPats(next);
+                if (next >= 3) {
+                  setTeddyPats(0);
+                  if (award('egg-teddy')) sfx.sparkle();
+                  say(lines.teddy);
+                } else {
+                  say(pick(lines.giggles));
+                }
+              }}
+            >
+              <img src={ART.teddy} alt="" draggable={false} />
+            </button>
+          )}
 
           {/* Pip */}
           <div className="nursery-pip">

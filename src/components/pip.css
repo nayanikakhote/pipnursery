@@ -295,3 +295,21 @@ button.pip:focus-visible {
 [data-motion='reduced'] .pip__body {
   animation: none !important;
 }
+
+/* ---------- drawn poses ----------
+   A pose image replaces the base face, so the live eyes, lids, earmuffs and
+   Zzz overlays all stand down: the drawing already has the expression. The
+   pose is fitted bottom-centre inside the same box as the base art so
+   swapping moods doesn't make Pip jump around. */
+.pip--posed .pip__eye,
+.pip--posed .pip__muffs,
+.pip--posed .pip__zzz {
+  display: none;
+}
+.pip__pose {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom center;
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.25));
+}

@@ -222,3 +222,11 @@ button {
   animation-iteration-count: 1 !important;
   transition-duration: 0.001ms !important;
 }
+
+/* Drawn icons from Pip's own icon sheet. They're small pixel-ish renders, so
+   keep them crisp rather than letting the browser smooth them into mush. */
+.pixel-icon--drawn {
+  display: block;
+  object-fit: contain;
+  image-rendering: -webkit-optimize-contrast;
+}

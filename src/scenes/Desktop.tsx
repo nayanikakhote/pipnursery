@@ -12,6 +12,7 @@ import { lookTarget } from '../lib/pointer';
 import { handlePipClick } from './Nursery';
 import type { Mode } from '../hooks/useMode';
 import Odometer from '../components/Odometer';
+import { ART } from '../content/assets';
 import './desktop.css';
 
 export function launch(id: AppId) {
@@ -151,6 +152,8 @@ export default function Desktop({ mode }: { mode: Mode }) {
   const secretUnlocked = useDream((s) => s.secretUnlocked);
   const badges = useDream((s) => s.badges);
   const say = useDream((s) => s.say);
+  const theme = useDream((s) => s.theme);
+  const paper = theme === 'night' ? ART.wallpaperNight : ART.wallpaperSunrise;
   const [selected, setSelected] = useState<AppId | null>(null);
   const areaRef = useRef<HTMLDivElement>(null);
   const [bounds, setBounds] = useState({ w: 1024, h: 700 });
@@ -200,8 +203,9 @@ export default function Desktop({ mode }: { mode: Mode }) {
   return (
     <div className="desktop" onPointerDown={(e) => { if (e.target === e.currentTarget) setSelected(null); }}>
       <div className="wallpaper" aria-hidden="true">
+        {paper && <img className="wallpaper__art" src={paper} alt="" />}
         <div className="wallpaper__stars" />
-        <div className="wallpaper__moon" />
+        {!paper && <div className="wallpaper__moon" />}
         <div className="wallpaper__clouds" />
       </div>
 

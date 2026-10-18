@@ -23,7 +23,7 @@ const SecretFile = lazy(() => import('../apps/TextFiles').then((m) => ({ default
 const Stickers = lazy(() => import('../apps/Stickers'));
 
 export const APPS: AppDef[] = [
-  { id: 'mypip', title: 'My Pip — employee file', label: 'My Pip', icon: 'idcard', group: 'me', w: 560, h: 560, component: MyPip },
+  { id: 'mypip', title: 'My Pip — employee file', label: 'My Pip', icon: 'idcard', group: 'me', w: 580, h: 640, component: MyPip },
   { id: 'story', title: 'My_Story.doc', label: 'My_Story.doc', icon: 'diary', group: 'me', w: 720, h: 600, component: Placeholder },
   { id: 'wishes', title: 'Dream Wishes — guestbook', label: 'Dream Wishes', icon: 'guestbook', group: 'me', w: 560, h: 600, component: Placeholder },
   { id: 'chat', title: 'PipChat.exe', label: 'PipChat.exe', icon: 'chat', group: 'me', w: 460, h: 560, component: Placeholder },
