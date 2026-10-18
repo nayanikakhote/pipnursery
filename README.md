@@ -9,7 +9,6 @@ There's music to make 🎼, toys to play with 🪇, a bedtime story to uncover �
 Built as a playful, interactive portfolio, Pip's Midnight Nursery brings together a nostalgic desktop experience, small interactive projects, character-driven storytelling, and a handful of surprises. It's part portfolio, part nursery, and part very tiny dream factory. 🧸
 
 ## Features
-
 - DreamOS 98: A Windows 98-inspired desktop environment with interactive windows, a taskbar, and a Start menu.
 - Lullaby.exe: An interactive music sequencer for composing little lullabies. 🎼
 - Nightlights: Character-themed lamps with interactive elements. 🪔
