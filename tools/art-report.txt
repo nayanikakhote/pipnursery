@@ -2,91 +2,122 @@ Pip's Midnight Nursery — art pipeline report
 
   nursery-wide           1672x941   125.8 KB
   nursery-tall            941x1672  129.2 KB
-  pip-asleep              315x266    10.3 KB  (kept, already present)
-  pip-pout                239x271    10.6 KB  (kept, already present)
-  nursery-diorama         660x554    43.6 KB  (kept, already present)
-  crt-desk                524x550    34.0 KB  (kept, already present)
-  wallpaper-night         652x498    20.1 KB  (kept, already present)
-  star-charm              248x249    10.2 KB  (kept, already present)
-  icon-idcard             128x112     5.7 KB  (kept, already present)
-  icon-musicbox           128x110     7.2 KB  (kept, already present)
-  icon-lampfolder         128x103     3.4 KB  (kept, already present)
-  icon-map                128x95      5.7 KB  (kept, already present)
-  icon-rattle             128x115     7.4 KB  (kept, already present)
-  icon-moonbook           128x126     7.1 KB  (kept, already present)
-  icon-ruler              128x133     6.9 KB  (kept, already present)
-  icon-stardiary          128x110     6.4 KB  (kept, already present)
-  icon-guestbook          128x101     5.7 KB  (kept, already present)
-  icon-chat               128x109     5.5 KB  (kept, already present)
-  icon-lantern            128x201     8.9 KB  (kept, already present)
-  icon-shootingstar       128x98      4.7 KB  (kept, already present)
-  icon-basket             128x99      6.6 KB  (kept, already present)
-  icon-notepad            128x126     7.1 KB  (kept, already present)
-  icon-scroll             128x99      6.0 KB  (kept, already present)
-  icon-sleepfile          128x140     4.2 KB  (kept, already present)
-  icon-moon               128x114     5.4 KB  (kept, already present)
-  icon-star               128x122     5.4 KB  (kept, already present)
-  icon-chest              128x109     6.3 KB  (kept, already present)
-  icon-cloud              128x97      4.1 KB  (kept, already present)
-  light-moonbeam          255x261     6.7 KB  (kept, already present)
-  light-cloudberry        305x218     5.8 KB  (kept, already present)
-  light-starling          220x252     5.8 KB  (kept, already present)
-  routes-map             1179x438    87.7 KB  (kept, already present)
-  rattle-star             166x223     6.1 KB  (kept, already present)
-  rattle-moon             167x227     5.7 KB  (kept, already present)
-  rattle-bone             215x223     6.0 KB  (kept, already present)
-  growth-wall             698x2048   33.2 KB  (kept, already present)
-  story-1                1016x1084   86.9 KB  (kept, already present)
-  story-2                1016x1084   88.9 KB  (kept, already present)
-  story-3                1014x1084  101.2 KB  (kept, already present)
-  story-4                1360x849   118.2 KB  (kept, already present)
-  story-5                1360x850    84.8 KB  (kept, already present)
-  book-cover              900x764   173.0 KB  (kept, already present)
-  book-1                  900x754   181.9 KB  (kept, already present)
-  book-2                  900x760   173.9 KB  (kept, already present)
-  book-3                  680x712   132.2 KB  (kept, already present)
-  book-4                  712x712   111.9 KB  (kept, already present)
-  book-5                  692x712   111.3 KB  (kept, already present)
-  book-6                  664x712   118.4 KB  (kept, already present)
-  nursery-mobile          245x276    10.4 KB  (kept, already present)
-  teddy                   170x199     6.5 KB  (kept, already present)
-  block-pink               80x80      1.0 KB  (kept, already present)
-  block-cream              80x81      1.0 KB  (kept, already present)
-  block-lilac              90x82      1.1 KB  (kept, already present)
-  block-gold               83x83      1.1 KB  (kept, already present)
-  pip-yawn                181x207     7.5 KB  (kept, already present)
-  pip-cheer               183x211     7.4 KB  (kept, already present)
-  pip-fly                 218x177     7.6 KB  (kept, already present)
-  pip-cloud               163x174     5.3 KB  (kept, already present)
-  pixel-pip-1             115x130     5.8 KB  (kept, already present)
-  pixel-pip-2             115x131     5.7 KB  (kept, already present)
-  pixel-pip-3             114x132     6.0 KB  (kept, already present)
-  pixel-pip-4             114x132     5.9 KB  (kept, already present)
-  pixel-pip-5             113x130     5.9 KB  (kept, already present)
-  wallpaper-sunrise       974x408    15.0 KB  (kept, already present)
-  secret-room             876x596    58.8 KB  (kept, already present)
-  sticker-star            152x144     5.8 KB  (kept, already present)
-  sticker-moon            130x144     5.8 KB  (kept, already present)
-  sticker-ghost           146x146     6.7 KB  (kept, already present)
-  sticker-teddy           144x150     8.0 KB  (kept, already present)
-  sticker-bow             152x132     7.5 KB  (kept, already present)
-  sticker-lantern         110x152     5.4 KB  (kept, already present)
-  sticker-note            118x128     4.8 KB  (kept, already present)
-  sticker-cloud           156x118     5.4 KB  (kept, already present)
-  sticker-sock            124x144     5.1 KB  (kept, already present)
-  sticker-frog            148x150     7.6 KB  (kept, already present)
-  sticker-mouse           156x150     9.3 KB  (kept, already present)
-  sticker-owl             160x146     9.1 KB  (kept, already present)
-  creature-boo            163x146     3.8 KB  (kept, already present)
-  creature-nibbles        170x158     5.5 KB  (kept, already present)
-  creature-fern           170x150     5.2 KB  (kept, already present)
-  creature-owl            167x164     7.1 KB  (kept, already present)
-  dreampad-frame          426x766    22.9 KB  (kept, already present)
-  pip-sneeze              680x760    27.9 KB  (kept, already present)
-  pip-whoa                712x760    27.7 KB  (kept, already present)
+  pip-asleep              311x414     7.8 KB  (alpha)
+  pip-pout                256x340     8.5 KB  (alpha)
+  ! nursery-diorama: crop was only 358px wide for a 700px slot — upscaled
+  nursery-diorama         700x561    48.4 KB  (alpha)
+  ! crt-desk: crop was only 262px wide for a 900px slot — upscaled
+  crt-desk                524x550    34.0 KB  (alpha)
+  ! wallpaper-night: crop was only 326px wide for a 1920px slot — upscaled
+  wallpaper-night         652x498    20.1 KB
+  star-charm              251x262     8.0 KB  (alpha)
+  icon-idcard             128x112     5.7 KB  (alpha)
+  icon-musicbox           128x110     7.2 KB  (alpha)
+  icon-lampfolder         128x103     3.4 KB  (alpha)
+  icon-map                128x95      5.7 KB  (alpha)
+  icon-rattle             128x115     7.4 KB  (alpha)
+  icon-moonbook           128x126     7.1 KB  (alpha)
+  icon-ruler              128x133     6.9 KB  (alpha)
+  icon-stardiary          128x110     6.4 KB  (alpha)
+  icon-guestbook          128x101     5.7 KB  (alpha)
+  icon-chat               128x109     5.5 KB  (alpha)
+  icon-lantern            128x201     8.9 KB  (alpha)
+  icon-shootingstar       128x98      4.7 KB  (alpha)
+  icon-basket             128x99      6.6 KB  (alpha)
+  icon-notepad            128x126     7.1 KB  (alpha)
+  icon-scroll             128x99      6.0 KB  (alpha)
+  icon-sleepfile          128x140     4.2 KB  (alpha)
+  icon-moon               128x114     5.4 KB  (alpha)
+  icon-star               128x122     5.4 KB  (alpha)
+  icon-chest              128x109     6.3 KB  (alpha)
+  icon-cloud              128x97      4.1 KB  (alpha)
+  light-moonbeam          246x264     5.0 KB  (alpha)
+  light-cloudberry        305x225     4.2 KB  (alpha)
+  light-starling          219x294     4.9 KB  (alpha)
+  routes-map             1179x438    87.7 KB
+  rattle-star             170x227     4.3 KB  (alpha)
+  rattle-moon             145x231     4.0 KB  (alpha)
+  rattle-bone             194x227     3.7 KB  (alpha)
+  ! growth-wall: crop was only 349px wide for a 760px slot — upscaled
+  growth-wall             698x2048   33.2 KB
+  ! story-1: crop was only 508px wide for a 1360px slot — upscaled
+  story-1                1016x1084   86.9 KB
+  ! story-2: crop was only 508px wide for a 1360px slot — upscaled
+  story-2                1016x1084   88.9 KB
+  ! story-3: crop was only 507px wide for a 1360px slot — upscaled
+  story-3                1014x1084  101.2 KB
+  ! story-4: crop was only 766px wide for a 1360px slot — upscaled
+  story-4                1360x849   118.2 KB
+  ! story-5: crop was only 765px wide for a 1360px slot — upscaled
+  story-5                1360x850    84.8 KB
+  ! book-cover: crop was only 462px wide for a 900px slot — upscaled
+  book-cover              900x764   173.0 KB
+  ! book-1: crop was only 468px wide for a 900px slot — upscaled
+  book-1                  900x754   181.9 KB
+  ! book-2: crop was only 464px wide for a 900px slot — upscaled
+  book-2                  900x760   173.9 KB
+  ! book-3: crop was only 340px wide for a 900px slot — upscaled
+  book-3                  680x712   132.2 KB
+  ! book-4: crop was only 356px wide for a 900px slot — upscaled
+  book-4                  712x712   111.9 KB
+  ! book-5: crop was only 346px wide for a 900px slot — upscaled
+  book-5                  692x712   111.3 KB
+  ! book-6: crop was only 332px wide for a 900px slot — upscaled
+  book-6                  664x712   118.4 KB
+  nursery-mobile          247x279     6.3 KB  (alpha)
+  teddy                   165x202     5.1 KB  (alpha)
+  block-pink               84x84      0.6 KB  (alpha)
+  block-cream              83x84      0.6 KB  (alpha)
+  block-lilac              84x84      0.6 KB  (alpha)
+  block-gold               83x85      0.8 KB  (alpha)
+  pip-yawn                180x239     5.2 KB  (alpha)
+  pip-cheer               159x211     4.6 KB  (alpha)
+  pip-fly                 222x180     5.8 KB  (alpha)
+  pip-cloud               171x177     3.6 KB  (alpha)
+  pixel-pip-1             117x133     4.6 KB  (alpha)
+  pixel-pip-2             117x133     4.4 KB  (alpha)
+  pixel-pip-3             117x134     4.6 KB  (alpha)
+  pixel-pip-4             117x134     4.5 KB  (alpha)
+  pixel-pip-5             117x133     4.8 KB  (alpha)
+  ! wallpaper-sunrise: crop was only 487px wide for a 1920px slot — upscaled
+  wallpaper-sunrise       974x408    15.0 KB
+  ! secret-room: crop was only 438px wide for a 1200px slot — upscaled
+  secret-room             876x596    58.8 KB
+  ! sticker-star: crop was only 79px wide for a 160px slot — upscaled
+  sticker-star            158x152     6.0 KB  (alpha)
+  ! sticker-moon: crop was only 69px wide for a 160px slot — upscaled
+  sticker-moon            138x150     5.5 KB  (alpha)
+  ! sticker-ghost: crop was only 69px wide for a 160px slot — upscaled
+  sticker-ghost           138x154     6.0 KB  (alpha)
+  ! sticker-teddy: crop was only 75px wide for a 160px slot — upscaled
+  sticker-teddy           150x164     7.9 KB  (alpha)
+  ! sticker-bow: crop was only 80px wide for a 160px slot — upscaled
+  sticker-bow             160x138     7.4 KB  (alpha)
+  ! sticker-lantern: crop was only 57px wide for a 160px slot — upscaled
+  sticker-lantern         114x160     6.0 KB  (alpha)
+  ! sticker-note: crop was only 59px wide for a 160px slot — upscaled
+  sticker-note            118x128     4.8 KB  (alpha)
+  ! sticker-cloud: crop was only 82px wide for a 160px slot — upscaled
+  sticker-cloud           160x123     5.2 KB  (alpha)
+  ! sticker-sock: crop was only 67px wide for a 160px slot — upscaled
+  sticker-sock            134x152     4.9 KB  (alpha)
+  ! sticker-frog: crop was only 77px wide for a 160px slot — upscaled
+  sticker-frog            154x158     8.5 KB  (alpha)
+  ! sticker-mouse: crop was only 82px wide for a 160px slot — upscaled
+  sticker-mouse           160x158     9.5 KB  (alpha)
+  ! sticker-owl: crop was only 86px wide for a 160px slot — upscaled
+  sticker-owl             160x153     8.9 KB  (alpha)
+  creature-boo            158x150     2.6 KB  (alpha)
+  creature-nibbles        148x155     3.2 KB  (alpha)
+  creature-fern           138x145     3.5 KB  (alpha)
+  creature-owl            164x159     5.2 KB  (alpha)
+  ! dreampad-frame: crop was only 213px wide for a 800px slot — upscaled
+  dreampad-frame          426x766    22.9 KB  (alpha)
+  pip-sneeze              684x910    21.1 KB  (alpha)
+  pip-whoa                722x960    22.3 KB  (alpha)
   ref-nursery            reference only, not shipped
   ref-desktop            reference only, not shipped
   ref-lullaby            reference only, not shipped
 
 84 images written to public/assets/
-total 2.42 MB
+total 2.37 MB

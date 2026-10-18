@@ -23,8 +23,107 @@ import sys
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageFilter
+from PIL import Image, ImageDraw, ImageFilter
 from scipy import ndimage
+
+# Pip's base drawing, so poses can be padded onto the same canvas shape.
+PIP_ASPECT = 585 / 778
+# How much breathing room each cut-out crop gets, as a fraction of its size.
+# Tight boxes were slicing the tops off lamps and clipping stars off poses.
+PAD_FRAC = 0.08
+
+_SESSION = None
+
+
+def rembg_alpha(im):
+    """Alpha from rembg's isnet-general-use model.
+
+    The flood-fill key cannot separate a near-white subject from a near-white
+    backdrop — a cloud's puffs and the studio background sit at the same
+    distance from white. A segmentation model decides by shape instead, which
+    is what these renders need.
+    """
+    global _SESSION
+    from rembg import new_session, remove
+
+    if _SESSION is None:
+        _SESSION = new_session("isnet-general-use")
+    out = remove(im.convert("RGBA"), session=_SESSION, post_process_mask=True)
+    return np.asarray(out)[:, :, 3]
+
+
+def keep_subject(alpha, gap=6, keep_frac=0.02):
+    """Largest blob, plus anything close enough to belong to it.
+
+    Pip's floating "zzZ", the sparkles around a pose and a lamp's detached
+    stars are separate components but obviously part of the drawing, so
+    components are grouped by dilating the mask and keeping every original
+    blob that lands in the same dilated group as the biggest one.
+    """
+    solid = alpha > 24
+    if not solid.any():
+        return alpha
+    grouped = ndimage.binary_dilation(solid, iterations=gap)
+    glab, gn = ndimage.label(grouped)
+    if gn == 0:
+        return alpha
+    sizes = ndimage.sum(solid, glab, range(1, gn + 1))
+    winner = int(np.argmax(sizes)) + 1
+    keep = glab == winner
+    # and any stray group that is still a decent fraction of the main one
+    biggest = sizes.max()
+    for i, sz in enumerate(sizes, start=1):
+        if i != winner and sz >= biggest * keep_frac and sz > 400:
+            keep |= glab == i
+    out = alpha.copy()
+    out[~keep] = 0
+    return out
+
+
+def cut_with_rembg(im):
+    a = keep_subject(rembg_alpha(im))
+    rgba = im.convert("RGBA")
+    rgba.putalpha(Image.fromarray(a, "L"))
+    return rgba
+
+
+def pad_box(box, size, frac=PAD_FRAC):
+    """Grow a crop box by `frac` on every side, clamped to the sheet."""
+    x0, y0, x1, y1 = box
+    dx = (x1 - x0) * frac
+    dy = (y1 - y0) * frac
+    return (
+        max(0, round(x0 - dx)),
+        max(0, round(y0 - dy)),
+        min(size[0], round(x1 + dx)),
+        min(size[1], round(y1 + dy)),
+    )
+
+
+def pad_to_pip_canvas(im):
+    """Put a pose on the same canvas shape as pip-base.
+
+    Poses are swapped in and out as Pip's mood changes. If each one is trimmed
+    to its own bounding box they are all different shapes, and `object-fit:
+    contain` lands them at different sizes — Pip visibly jumps. Padding every
+    pose to pip-base's aspect, bottom-centred, makes the swap still.
+    """
+    im = trim(im)
+    w, h = im.size
+    target_w = max(w, round(h * PIP_ASPECT))
+    target_h = max(h, round(target_w / PIP_ASPECT))
+    target_w = round(target_h * PIP_ASPECT)
+    canvas = Image.new("RGBA", (max(target_w, w), target_h), (0, 0, 0, 0))
+    canvas.paste(im, ((canvas.width - w) // 2, canvas.height - h), im)
+    return canvas
+
+
+def trim_pad(im, pad=4):
+    """Trim to the subject, then give it a few transparent pixels back."""
+    im = trim(im)
+    out = Image.new("RGBA", (im.width + pad * 2, im.height + pad * 2), (0, 0, 0, 0))
+    out.paste(im, (pad, pad), im)
+    return out
 
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "art-raw"
@@ -212,6 +311,7 @@ def main():
     ap.add_argument("ids", nargs="*")
     ap.add_argument("--contact", action="store_true")
     ap.add_argument("--force", action="store_true", help="overwrite files that already exist")
+    ap.add_argument("--rembg", action="store_true", help="cut objects out with rembg instead of the colour key")
     a = ap.parse_args()
 
     spec = json.loads((ROOT / "tools" / "crops.json").read_text(encoding="utf-8"))
@@ -231,8 +331,12 @@ def main():
         if piece["mode"] == "whole":
             crop = src
         else:
-            x0, y0, x1, y1 = piece["box"]
-            crop = src.crop((x0, y0, x1, y1))
+            box = tuple(piece["box"])
+            # Cut-outs get breathing room so nothing is sliced flat; a grid's
+            # cells are padded per cell further down instead.
+            if a.rembg and piece["mode"] == "cut":
+                box = pad_box(box, src.size, piece.get("pad", PAD_FRAC))
+            crop = src.crop(box)
         mode = piece["mode"]
         ship = piece.get("ship", True)
 
@@ -249,11 +353,27 @@ def main():
             ch = crop.height / rows
             for i, cell in enumerate(piece["names"]):
                 cx, cy = i % cols, i // cols
-                sub = crop.crop((round(cx * cw), round(cy * ch), round((cx + 1) * cw), round((cy + 1) * ch)))
+                # A cell falls back to the colour key when rembg is worse for
+                # it — see the "key"/"flood_cells" notes in crops.json. Only a
+                # rembg cell is padded: the colour key would keep a slice of
+                # the neighbouring icon that the padding pulls in.
+                use_rembg = (
+                    a.rembg
+                    and piece.get("cut")
+                    and piece.get("key") != "flood"
+                    and cell not in piece.get("flood_cells", [])
+                )
+                cell_box = (round(cx * cw), round(cy * ch), round((cx + 1) * cw), round((cy + 1) * ch))
+                if use_rembg:
+                    cell_box = pad_box(cell_box, crop.size, piece.get("pad", PAD_FRAC))
+                sub = crop.crop(cell_box)
                 name = f"{piece['id']}-{cell}"
                 sub.save(BYID / f"{name}.png")
                 kw = {k: piece[k] for k in ("tol", "fringe_tol", "grow") if k in piece}
-                img = trim(key_background(sub, **kw)) if piece.get("cut") else sub
+                if piece.get("cut"):
+                    img = trim_pad(cut_with_rembg(sub)) if use_rembg else trim(key_background(sub, **kw))
+                else:
+                    img = sub
                 if ship:
                     made[name] = save(img, name, report, force=a.force)
             continue
@@ -261,10 +381,17 @@ def main():
         crop.save(BYID / f"{piece['id']}.png")
         kw = {k: piece[k] for k in ("tol", "fringe_tol", "grow") if k in piece}
         if mode == "cut":
-            img = key_background(crop, **kw)
+            if a.rembg and piece.get("key") != "flood":
+                img = cut_with_rembg(crop)
+            else:
+                img = key_background(crop, **kw)
+            # a render's soft contact shadow survives either method, so it is
+            # wiped positionally for the pieces that have one
             if piece.get("shadow_floor"):
                 img = wipe_ground_shadow(img, band=float(piece["shadow_floor"]))
-            img = trim(img)
+            img = trim_pad(img) if (a.rembg and piece.get("key") != "flood") else trim(img)
+            if piece.get("pose"):
+                img = pad_to_pip_canvas(img)
         elif mode == "green":
             img, box = key_green(crop, bg_kw=kw)
             if box:
@@ -324,21 +451,36 @@ def main():
     print("\n".join(report))
 
     if a.contact:
-        cols = 8
-        thumb = 150
-        items = sorted(made)
+        # Every cut-out on navy AND on white: a halo that hides against one
+        # background is obvious against the other.
+        cut_ids = []
+        for piece in spec["pieces"]:
+            if piece["mode"] == "cut":
+                cut_ids.append(piece["id"])
+            elif piece["mode"] == "grid" and piece.get("cut"):
+                cut_ids += [f"{piece['id']}-{c}" for c in piece["names"]]
+        items = [n for n in cut_ids if n in made]
+
+        cols = 10
+        thumb = 128
         rows = (len(items) + cols - 1) // cols
-        sheetimg = Image.new("RGB", (cols * thumb, rows * thumb), (48, 54, 78))
-        for i, name in enumerate(items):
-            im = Image.open(OUT / f"{name}.webp").convert("RGBA")
-            im.thumbnail((thumb - 8, thumb - 8))
-            px = (i % cols) * thumb + (thumb - im.width) // 2
-            py = (i // cols) * thumb + (thumb - im.height) // 2
-            sheetimg.paste(im, (px, py), im)
-        p = ROOT / "tools" / "shots" / "contact.png"
-        p.parent.mkdir(parents=True, exist_ok=True)
-        sheetimg.save(p)
-        print(f"\ncontact sheet -> {p}")
+        band = rows * thumb
+        sheet = Image.new("RGB", (cols * thumb, band * 2 + 26), (255, 255, 255))
+        d = ImageDraw.Draw(sheet)
+        for strip, bg in enumerate([(48, 54, 78), (255, 255, 255)]):
+            top = strip * band + (26 if strip else 0)
+            d.rectangle([0, top, sheet.width, top + band], fill=bg)
+            for i, name in enumerate(items):
+                im = Image.open(OUT / f"{name}.webp").convert("RGBA")
+                im.thumbnail((thumb - 8, thumb - 8))
+                px = (i % cols) * thumb + (thumb - im.width) // 2
+                py = top + (i // cols) * thumb + (thumb - im.height) // 2
+                sheet.paste(im, (px, py), im)
+        d.text((6, band + 6), "same cut-outs on white — halos and clipped edges show here", fill=(0, 0, 0))
+        path = ROOT / "tools" / "shots" / "cutouts-contact.png"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        sheet.save(path)
+        print(chr(10) + f"contact sheet ({len(items)} cut-outs) -> {path}")
 
 
 if __name__ == "__main__":
