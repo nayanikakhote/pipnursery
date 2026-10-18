@@ -29,9 +29,9 @@ Pip's Midnight Nursery — art pipeline report
   icon-star               128x122     5.4 KB  (alpha)
   icon-chest              128x109     6.3 KB  (alpha)
   icon-cloud              128x97      4.1 KB  (alpha)
-  light-moonbeam          233x210     5.7 KB  (alpha)
-  light-cloudberry        291x210     5.9 KB  (alpha)
-  light-starling          221x210     5.4 KB  (alpha)
+  light-moonbeam          255x261     6.7 KB  (alpha)
+  light-cloudberry        305x218     5.8 KB  (alpha)
+  light-starling          220x252     5.8 KB  (alpha)
   routes-map             1179x438    87.7 KB
   rattle-star             166x223     6.1 KB  (alpha)
   rattle-moon             167x227     5.7 KB  (alpha)

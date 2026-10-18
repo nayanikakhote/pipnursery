@@ -130,6 +130,26 @@ def key_green(im, tol=90, bg_kw=None):
     return Image.fromarray(final, "RGBA"), box
 
 
+def wipe_ground_shadow(im, band=0.16, tol=22):
+    """Erase the soft white shadow a render leaves under an object.
+
+    It can't be keyed by colour: on these lamps the shadow (7-25 from white)
+    and the lightest parts of the subject (a cloud's puffs, 6-15) occupy the
+    same range, so any tolerance that catches one eats the other. But the
+    shadow only ever lies in a band at the very bottom, and everything of the
+    subject down there is saturated cream (100+ from white). So the rule is
+    positional: in the bottom `band` of the image, drop what is within `tol`
+    of white.
+    """
+    arr = np.asarray(im.convert("RGBA")).copy()
+    h = arr.shape[0]
+    y0 = int(h * (1 - band))
+    sub = arr[y0:, :, :3].astype(np.int16)
+    near_white = np.abs(sub - 255).max(axis=2) <= tol
+    arr[y0:, :, 3][near_white] = 0
+    return Image.fromarray(arr, "RGBA")
+
+
 def trim(im):
     bbox = im.getbbox()
     return im.crop(bbox) if bbox else im
@@ -214,7 +234,10 @@ def main():
         crop.save(BYID / f"{piece['id']}.png")
         kw = {k: piece[k] for k in ("tol", "fringe_tol", "grow") if k in piece}
         if mode == "cut":
-            img = trim(key_background(crop, **kw))
+            img = key_background(crop, **kw)
+            if piece.get("shadow_floor"):
+                img = wipe_ground_shadow(img, band=float(piece["shadow_floor"]))
+            img = trim(img)
         elif mode == "green":
             img, box = key_green(crop, bg_kw=kw)
             if box:

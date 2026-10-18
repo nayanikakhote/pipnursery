@@ -49,6 +49,7 @@
 
 .nl__intro {
   margin: 0;
+  padding: 0 62px;
   font-family: var(--font-ui);
   font-size: 15px;
   line-height: 1.45;
@@ -56,18 +57,28 @@
   opacity: 0.92;
 }
 
+/* A decorative window on the back wall. It used to sit at top:52px, right in
+   the shelf's first row, where it overlapped whichever lamp landed on the
+   right. It now lives in the header band beside the intro text — and below
+   700px there is no header room to spare, so it simply isn't there. */
 .nl__window {
   position: absolute;
   right: 14px;
-  top: 52px;
-  width: 78px;
-  height: 78px;
+  top: 6px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  border: 5px solid rgba(241, 230, 220, 0.55);
+  border: 4px solid rgba(241, 230, 220, 0.55);
   background: radial-gradient(circle at 60% 30%, #3b4474, #1b1f3a);
-  box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.6);
+  box-shadow: inset 0 0 14px rgba(0, 0, 0, 0.6);
   pointer-events: none;
   transition: opacity 0.5s;
+  z-index: 1;
+}
+@container (max-width: 700px) {
+  .nl__window {
+    display: none;
+  }
 }
 .nl.is-dark .nl__window {
   opacity: 0.25;
@@ -76,10 +87,10 @@
   position: absolute;
   left: 22%;
   top: 22%;
-  width: 30px;
-  height: 30px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  box-shadow: 9px 7px 0 0 var(--gold);
+  box-shadow: 6px 5px 0 0 var(--gold);
 }
 
 /* ---------------- the shelf ---------------- */
@@ -312,11 +323,6 @@
 @container (max-width: 420px) {
   .nl__shelf {
     grid-template-columns: 1fr;
-  }
-  .nl__window {
-    width: 56px;
-    height: 56px;
-    top: 48px;
   }
 }
 

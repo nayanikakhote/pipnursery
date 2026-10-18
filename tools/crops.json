@@ -27,8 +27,9 @@
       "names": ["guestbook", "chat", "lantern", "shootingstar", "basket", "notepad", "scroll", "sleepfile", "moon", "star", "chest", "cloud"],
       "cut": true, "note": "OS-03 icons 9-20" },
 
-    { "id": "light",           "sheet": "batch2",   "box": [144, 62, 1024, 272],    "mode": "grid", "cols": 3, "rows": 1,
-      "names": ["moonbeam", "cloudberry", "starling"], "cut": true, "note": "PRJ-01 the three nightlights" },
+    { "id": "light-moonbeam",  "sheet": "batch2",   "box": [89, 3, 387, 288],       "mode": "cut",  "shadow_floor": 0.26,  "note": "PRJ-01 Moonbeam. Measured extents are x101-375 y15-271, so this keeps ~12px of padding all round; an equal-thirds grid sliced the top off the moon." },
+    { "id": "light-cloudberry","sheet": "batch2",   "box": [421, 41, 766, 288],     "mode": "cut",  "shadow_floor": 0.26,  "note": "PRJ-01 Cloudberry (x433-754 y53-271)" },
+    { "id": "light-starling",  "sheet": "batch2",   "box": [792, 11, 1049, 288],    "mode": "cut",  "shadow_floor": 0.26,  "note": "PRJ-01 Starling (x804-1037 y23-271)" },
     { "id": "routes-map",      "sheet": "batch2",   "box": [0, 293, 1179, 731],     "mode": "flat", "note": "PRJ-02 rooftop delivery map" },
     { "id": "rattle",          "sheet": "batch2",   "box": [120, 770, 1060, 1000],  "mode": "grid", "cols": 3, "rows": 1,
       "names": ["star", "moon", "bone"], "cut": true, "note": "TOY-01 rattles" },
