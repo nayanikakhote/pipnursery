@@ -282,6 +282,22 @@ async function runSize(browser, size) {
   attach(page, where);
 
   await page.goto(BASE, { waitUntil: 'networkidle' });
+
+  // A first-time visitor must actually be greeted. This regressed once because
+  // the greeting effect depended on the visit count, which App bumps 0->1
+  // straight after load: the effect re-ran, its cleanup killed the timers, and
+  // nobody ever said hello.
+  try {
+    await page.waitForSelector('.bubble', { timeout: 2000 });
+  } catch {
+    problems.push(`[${where}] no greeting bubble within 2s of a first visit`);
+  }
+  try {
+    await page.waitForSelector('.crt--hint', { timeout: 8000 });
+  } catch {
+    problems.push(`[${where}] the computer never got its "psst, click me" hint within 8s`);
+  }
+
   await wait(600);
 
   if (!size.touch) {

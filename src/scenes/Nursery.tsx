@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import Pip from '../components/Pip';
@@ -58,13 +58,18 @@ export default function Nursery() {
   const [blocksTumble, setBlocksTumble] = useState(0);
   const [teddyPats, setTeddyPats] = useState(0);
   const [origin, setOrigin] = useState('70% 60%');
-  const greeted = useRef(false);
   const zooming = scene === 'zooming';
 
+  // Runs once, on mount. It used to depend on `visits`, but App bumps the
+  // visit count from 0 to 1 immediately after load: the effect re-ran, its
+  // cleanup cancelled both timers, and a `greeted` ref stopped the second run
+  // from setting new ones — so a first-time visitor was never greeted at all.
+  // The count is read inside the timeout instead, by which time it is settled.
   useEffect(() => {
-    if (greeted.current) return;
-    greeted.current = true;
-    const t1 = window.setTimeout(() => say(visits > 1 ? lines.returning(visits) : lines.firstHello), 900);
+    const t1 = window.setTimeout(() => {
+      const n = useDream.getState().visitor.visits;
+      say(n > 1 ? lines.returning(n) : lines.firstHello);
+    }, 900);
     const t2 = window.setTimeout(() => {
       setHint(true);
       say(lines.computerHint);
@@ -73,7 +78,7 @@ export default function Nursery() {
       window.clearTimeout(t1);
       window.clearTimeout(t2);
     };
-  }, [say, visits]);
+  }, [say]);
 
   const goComputer = () => {
     unlockAudio();
