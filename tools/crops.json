@@ -13,6 +13,9 @@
   ],
 
   "pieces": [
+    { "id": "nursery-wide",    "sheet": "NUR-01_nursery_wide", "mode": "whole", "note": "NUR-01 the painted room, 16:9. Used whenever the viewport is wider than 4:5." },
+    { "id": "nursery-tall",    "sheet": "NUR-01_nursery_tall", "mode": "whole", "note": "NUR-02 the same room in portrait, 9:16. Used at max-aspect-ratio 4/5." },
+
     { "id": "pip-asleep",      "sheet": "batch1.1", "box": [45, 36, 371, 313],      "mode": "cut",  "note": "PIP-02 sleeping on a cloud" },
     { "id": "pip-pout",        "sheet": "batch1.1", "box": [421, 36, 661, 313],     "mode": "cut",  "note": "PIP-05 earmuffs, sulking" },
     { "id": "nursery-diorama", "sheet": "batch1.1", "box": [727, 36, 1057, 313],    "mode": "cut",  "note": "cosy-room diorama; not a usable room background" },

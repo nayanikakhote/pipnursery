@@ -20,7 +20,14 @@
     <meta name="twitter:title" content="Pip's Midnight Nursery" />
     <meta name="twitter:description" content="I build the dreams you fall asleep inside. — Pip" />
     <meta name="twitter:image" content="https://pipnursery.vercel.app/og.png" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Icons are built from art-raw/favicon.png by tools/make_favicons.py.
+         Vite rewrites these root-relative paths with the configured base, so
+         they keep working from a sub-path. -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

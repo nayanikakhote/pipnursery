@@ -36,6 +36,8 @@ GEN = ROOT / "src" / "content" / "art.gen.ts"
 # How wide each asset is actually drawn, at 2x, so nothing ships bigger than it
 # needs to be. Anything not listed keeps its natural size (capped at MAX).
 DISPLAY_2X = {
+    "nursery-wide": 1920,
+    "nursery-tall": 1080,
     "wallpaper-night": 1920,
     "wallpaper-sunrise": 1920,
     "routes-map": 1400,
@@ -165,8 +167,22 @@ def target_width(name, natural):
     return min(natural, MAX)
 
 
-def save(im, name, report, min_display=None):
+def save(im, name, report, min_display=None, force=False):
+    """Write public/assets/<name>.webp.
+
+    Existing files are left alone unless --force. The pipeline is rerun to add
+    one or two pieces far more often than to redo everything, and a blanket
+    rerun would quietly replace work that had been corrected by hand. The
+    registry is still updated either way, so a skipped file stays listed.
+    """
     OUT.mkdir(parents=True, exist_ok=True)
+    existing = OUT / f"{name}.webp"
+    if existing.exists() and not force:
+        with Image.open(existing) as cur:
+            w, h = cur.size
+        kb = existing.stat().st_size / 1024
+        report.append(f"  {name:22s} {w:4d}x{h:<4d} {kb:6.1f} KB  (kept, already present)")
+        return {"w": w, "h": h, "kb": round(kb, 1)}
     natural = im.width
     tw = target_width(name, natural)
     if im.width > tw:
@@ -195,6 +211,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("ids", nargs="*")
     ap.add_argument("--contact", action="store_true")
+    ap.add_argument("--force", action="store_true", help="overwrite files that already exist")
     a = ap.parse_args()
 
     spec = json.loads((ROOT / "tools" / "crops.json").read_text(encoding="utf-8"))
@@ -211,10 +228,20 @@ def main():
         if sheet not in sheets:
             sheets[sheet] = Image.open(RAW / f"{sheet}.png").convert("RGB")
         src = sheets[sheet]
-        x0, y0, x1, y1 = piece["box"]
-        crop = src.crop((x0, y0, x1, y1))
+        if piece["mode"] == "whole":
+            crop = src
+        else:
+            x0, y0, x1, y1 = piece["box"]
+            crop = src.crop((x0, y0, x1, y1))
         mode = piece["mode"]
         ship = piece.get("ship", True)
+
+        if mode == "whole":
+            # the file is already exactly one asset; just convert it
+            img = src
+            if ship:
+                made[piece["id"]] = save(img, piece["id"], report, force=a.force)
+            continue
 
         if mode == "grid":
             cols, rows = piece["cols"], piece["rows"]
@@ -228,7 +255,7 @@ def main():
                 kw = {k: piece[k] for k in ("tol", "fringe_tol", "grow") if k in piece}
                 img = trim(key_background(sub, **kw)) if piece.get("cut") else sub
                 if ship:
-                    made[name] = save(img, name, report)
+                    made[name] = save(img, name, report, force=a.force)
             continue
 
         crop.save(BYID / f"{piece['id']}.png")
@@ -254,7 +281,7 @@ def main():
         else:
             img = crop
         if ship:
-            made[piece["id"]] = save(img, piece["id"], report)
+            made[piece["id"]] = save(img, piece["id"], report, force=a.force)
         else:
             report.append(f"  {piece['id']:22s} reference only, not shipped")
 

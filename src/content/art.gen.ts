@@ -46,6 +46,8 @@ export const ART_SIZES: Record<string, { w: number; h: number }> = {
   'light-starling': { w: 220, h: 252 },
   'nursery-diorama': { w: 660, h: 554 },
   'nursery-mobile': { w: 245, h: 276 },
+  'nursery-tall': { w: 941, h: 1672 },
+  'nursery-wide': { w: 1672, h: 941 },
   'pip-asleep': { w: 315, h: 266 },
   'pip-cheer': { w: 183, h: 211 },
   'pip-cloud': { w: 163, h: 174 },
