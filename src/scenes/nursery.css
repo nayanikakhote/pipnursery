@@ -699,18 +699,47 @@
   cursor: var(--cur-pointer);
   transition: color 0.3s, transform 0.3s, text-shadow 0.3s;
 }
-.hidden-star:hover {
-  color: rgba(244, 201, 107, 0.7);
+/* The button has no text in it — it is a transparent hotspot sitting on a
+   star that is already painted into the room — so colour and text-shadow had
+   nothing to tint and the hover and found states were doing nothing at all.
+   A pseudo-element gives them something to light up: invisible at rest, a
+   soft glow under the cursor, and a permanent twinkle once found. */
+.hidden-star::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 245, 210, 0.95), rgba(244, 201, 107, 0.5) 45%, transparent 70%);
+  opacity: 0;
+  transition:
+    opacity 0.25s ease,
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+}
+.hidden-star:hover::after {
+  opacity: 0.6;
+}
+.hidden-star:focus-visible::after {
+  opacity: 0.8;
 }
 .hidden-star:focus-visible {
   outline: 3px solid var(--cream);
   outline-offset: 2px;
   border-radius: 50%;
 }
-.hidden-star.found {
-  color: var(--gold);
-  transform: scale(1.8);
-  text-shadow: 0 0 10px var(--gold);
+.hidden-star.found::after {
+  opacity: 1;
+  transform: scale(1.15);
+  animation: star-found 2.6s ease-in-out infinite;
+}
+@keyframes star-found {
+  50% {
+    opacity: 0.65;
+    transform: scale(0.95);
+  }
+}
+[data-motion='reduced'] .hidden-star.found::after {
+  animation: none;
 }
 .pip-constellation {
   position: absolute;
@@ -1307,24 +1336,24 @@
 
 /* the five real stars, on five painted ones */
 .hs-s1 {
-  left: 24.5%;
-  top: 39%;
+  left: 26.8%;
+  top: 35.4%;
 }
 .hs-s2 {
-  left: 26.3%;
-  top: 5.5%;
+  left: 26.8%;
+  top: 7.7%;
 }
 .hs-s3 {
-  left: 75.6%;
+  left: 75.7%;
   top: 7.8%;
 }
 .hs-s4 {
-  left: 79%;
-  top: 44.5%;
+  left: 80.6%;
+  top: 41.5%;
 }
 .hs-s5 {
-  left: 94%;
-  top: 33%;
+  left: 91.6%;
+  top: 47.6%;
 }
 
 /* reactions, placed on the painting */
@@ -1418,12 +1447,12 @@
     top: 6.2%;
   }
   .hs-s2 {
-    left: 35.3%;
+    left: 35.4%;
     top: 1.9%;
   }
   .hs-s3 {
-    left: 76%;
-    top: 4%;
+    left: 78.8%;
+    top: 2.4%;
   }
   .hs-s4 {
     left: 92.3%;
