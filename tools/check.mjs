@@ -39,6 +39,7 @@ const SIZES = [
   { name: 'tablet', width: 820, height: 1180, touch: true },
   { name: 'phone', width: 390, height: 844, touch: true },
   { name: 'phone-landscape', width: 844, height: 390, touch: true },
+  { name: 'dreampad-landscape', width: 620, height: 380, touch: true },
 ];
 
 // ---------------------------------------------------------------- preview
@@ -195,6 +196,13 @@ async function runSize(browser, size) {
 
   await page.goto(BASE, { waitUntil: 'networkidle' });
   await wait(600);
+
+  if (!size.touch) {
+    for (let i = 0; i < 8; i++) await page.mouse.move(300 + i * 40, 300 + i * 25);
+    await wait(120);
+    const sparks = await page.locator('.spark.is-on').count();
+    if (sparks === 0) problems.push(`[${where}] sparkle trail emitted nothing on pointermove`);
+  }
   await shot(page, `${where}-1-nursery`);
   await checkOverflow(page, `${where} nursery`);
   if (size.touch) await checkTouchTargets(page, `${where} nursery`);

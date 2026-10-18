@@ -192,3 +192,52 @@
   width: 24px;
   height: 24px;
 }
+
+/* ---------- landscape phone: two columns ----------
+   A tall handheld turned sideways: the home grid goes wide rather than making
+   you scroll a one-column list through a 390px-tall window. */
+@media (max-height: 450px) and (orientation: landscape) {
+  .dp-device {
+    width: min(96vw, 820px);
+    height: calc(100dvh - 12px);
+  }
+  .dp-grid {
+    grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  }
+  /* Pip keeps the left column; the headings and both grids flow down the
+     right one. Explicit columns rather than named areas, so the two <h2>s and
+     two grids can't auto-place themselves on top of each other. */
+  .dp-home {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 4px 14px;
+    align-content: start;
+  }
+  .dp-pip {
+    position: relative;
+    grid-column: 1;
+    grid-row: 1 / -1;
+    align-self: start;
+  }
+  /* the bubble can't live inside a 140px column — let it out over the grid */
+  .dp-bubble {
+    position: absolute;
+    left: 78%;
+    top: 0;
+    width: max-content;
+    max-width: 190px;
+    font-size: 12px;
+    z-index: 3;
+  }
+  .dp-h,
+  .dp-grid {
+    grid-column: 2;
+  }
+  .dp-h {
+    margin: 2px 0;
+    font-size: 14px;
+  }
+  .dp-buttons {
+    padding: 4px 10px;
+  }
+}

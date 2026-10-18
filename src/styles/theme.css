@@ -230,3 +230,54 @@ button {
   object-fit: contain;
   image-rendering: -webkit-optimize-contrast;
 }
+
+/* ---------- sparkle trail ----------
+   Pooled particles: twenty spans are created once and reused, so following the
+   cursor never allocates. Off on touch (a tap gets a small burst instead) and
+   off entirely under reduced motion. */
+.sparkles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9000;
+}
+.spark {
+  position: absolute;
+  font-size: 13px;
+  line-height: 1;
+  color: var(--pink);
+  opacity: 0;
+  will-change: transform, opacity;
+  text-shadow: 0 0 6px rgba(239, 198, 210, 0.9);
+}
+.spark:nth-child(3n) {
+  color: var(--gold);
+  text-shadow: 0 0 6px rgba(244, 201, 107, 0.9);
+}
+.spark:nth-child(3n + 1) {
+  color: var(--lavender);
+  text-shadow: 0 0 6px rgba(201, 184, 232, 0.9);
+}
+.spark.is-on {
+  animation: spark-fall 700ms ease-out forwards;
+}
+@keyframes spark-fall {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(var(--s)) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--dx)), calc(-50% + 34px)) scale(calc(var(--s) * 0.4)) rotate(var(--r));
+  }
+}
+/* the star that came loose in the finale */
+.sparkles.is-gold .spark,
+.sparkles.is-gold .spark:nth-child(3n),
+.sparkles.is-gold .spark:nth-child(3n + 1) {
+  color: var(--gold);
+  font-size: 15px;
+  text-shadow:
+    0 0 8px rgba(244, 201, 107, 1),
+    0 0 16px rgba(244, 201, 107, 0.6);
+}

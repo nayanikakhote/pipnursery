@@ -160,17 +160,7 @@
     inset 0 0 0 2px rgba(0, 0, 0, 0.28),
     inset 0 0 0 4px rgba(255, 255, 255, 0.08);
 }
-.room__door .knob,
-.room__door::marker {
-  display: none;
-}
-.room__door.marked::before {
-  /* granny owl's pencil mark, once the growth chart has been read */
-  box-shadow:
-    inset 0 0 0 2px rgba(0, 0, 0, 0.28),
-    inset 0 0 0 4px rgba(255, 255, 255, 0.08),
-    0 0 0 0 transparent;
-}
+
 .room__door.marked::after {
   content: '';
   position: absolute;
@@ -938,4 +928,80 @@
 }
 [data-motion='reduced'] .ceiling-stars {
   animation: none;
+}
+
+/* ---------- the room reacts to what you've finished ---------- */
+
+/* toys: the blocks have re-stacked themselves to spell PIP, and they're proud */
+.blocks.spelled span {
+  animation: blocks-proud 3.4s ease-in-out infinite;
+}
+.blocks.spelled .blk {
+  filter: drop-shadow(0 0 7px rgba(244, 201, 107, 0.75));
+}
+@keyframes blocks-proud {
+  0%,
+  88%,
+  100% {
+    transform: none;
+  }
+  92% {
+    transform: translateY(-4px) rotate(-2deg);
+  }
+  96% {
+    transform: translateY(-2px) rotate(2deg);
+  }
+}
+
+/* every sticker found: a 2003 marquee, because of course */
+.dreamy-banner {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  gap: 40px;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 5px 0;
+  font-family: var(--font-pixel);
+  font-size: 15px;
+  color: var(--ink);
+  background: linear-gradient(90deg, #f4c96b, #efc6d2, #c9b8e8, #a7e0d5, #f4c96b);
+  background-size: 300% 100%;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+  animation: dreamy-hue 7s linear infinite;
+}
+.dreamy-banner span {
+  animation: dreamy-slide 18s linear infinite;
+}
+@keyframes dreamy-slide {
+  to {
+    transform: translateX(-100%);
+  }
+}
+@keyframes dreamy-hue {
+  to {
+    background-position: 300% 0;
+  }
+}
+[data-motion='reduced'] .dreamy-banner,
+[data-motion='reduced'] .dreamy-banner span,
+[data-motion='reduced'] .blocks.spelled span {
+  animation: none;
+}
+[data-motion='reduced'] .dreamy-banner {
+  justify-content: center;
+}
+[data-motion='reduced'] .dreamy-banner span + span {
+  display: none;
+}
+
+/* ---------- landscape phone: everything lies down ---------- */
+@media (max-height: 450px) and (orientation: landscape) {
+  .dreamy-banner {
+    font-size: 12px;
+    padding: 3px 0;
+  }
 }

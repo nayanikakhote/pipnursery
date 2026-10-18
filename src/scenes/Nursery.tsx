@@ -6,6 +6,7 @@ import { MuteToggle, ThemeToggle, SpeechBubble } from '../components/Controls';
 import { useDream } from '../store/dreamStore';
 import { sfx, unlockAudio, PENTA } from '../audio/audio';
 import { lines, pick } from '../content/copy';
+import { STICKERS } from '../apps/Stickers';
 import { ART, SCREENS, art } from '../content/assets';
 import { asset } from '../lib/asset';
 import './nursery.css';
@@ -47,6 +48,7 @@ export default function Nursery() {
   const secretUnlocked = useDream((s) => s.secretUnlocked);
   const reducedMotion = useDream((s) => s.reducedMotion);
   const award = useDream((s) => s.award);
+  const badges = useDream((s) => s.badges);
   const [hint, setHint] = useState(false);
   const [found, setFound] = useState<string[]>([]);
   const [shooting, setShooting] = useState(0);
@@ -98,6 +100,7 @@ export default function Nursery() {
   };
 
   const allStars = found.length === HIDDEN_STARS.length;
+  const allStickers = STICKERS.every((st) => badges.includes(st.id));
   const room = ART.nurseryWide;
   const crtArt = ART.crtDesk;
   const scr = SCREENS['crt-desk'];
@@ -357,6 +360,13 @@ export default function Nursery() {
           {progress.story && <div className="ceiling-stars" aria-hidden="true" />}
         </div>
       </motion.div>
+
+      {allStickers && (
+        <div className="dreamy-banner" role="status">
+          <span>★ 100% DREAMY ★ you found everything ★ pip is SO proud ★</span>
+          <span aria-hidden="true">★ 100% DREAMY ★ you found everything ★ pip is SO proud ★</span>
+        </div>
+      )}
 
       {zooming && <div className="zoom-flash" aria-hidden="true" />}
 

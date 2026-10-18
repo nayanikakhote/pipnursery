@@ -7,6 +7,7 @@ import { installPointerTracking } from './lib/pointer';
 import { useMode, usePrefersReducedMotion } from './hooks/useMode';
 import { lines } from './content/copy';
 import { Toast } from './components/Controls';
+import SparkleTrail from './components/SparkleTrail';
 import Nursery from './scenes/Nursery';
 import Boot, { ShutDown } from './scenes/Boot';
 import Desktop from './scenes/Desktop';
@@ -139,7 +140,17 @@ export default function App() {
     const st = useDream.getState();
     st.setMood('whoa');
     st.say(lines.whoa);
-    st.showToast(mode === 'phone' ? 'packing DreamOS into my DreamPad…' : mode === 'tablet' ? 'squishing the windows…' : 'unpacking my big desk…');
+    const short = window.innerHeight < 450 && window.innerWidth > window.innerHeight;
+    st.showToast(
+      short
+        ? 'rearranging the furniture…'
+        : mode === 'phone'
+          ? 'packing DreamOS into my DreamPad…'
+          : mode === 'tablet'
+            ? 'squishing the windows…'
+            : 'unpacking my big desk…',
+    );
+    if (short) window.setTimeout(() => useDream.getState().say('oh! lying down. comfy.'), 500);
     sfx.whoosh();
   }, [mode]);
 
@@ -164,6 +175,7 @@ export default function App() {
         </motion.main>
       </AnimatePresence>
       <Toast />
+      <SparkleTrail />
     </>
   );
 }
