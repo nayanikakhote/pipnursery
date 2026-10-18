@@ -37,6 +37,7 @@ const keep = args.includes('--keep');
 const SIZES = [
   { name: 'desktop', width: 1440, height: 900, touch: false },
   { name: 'tablet', width: 820, height: 1180, touch: true },
+  { name: 'ipad-landscape', width: 1024, height: 768, touch: true },
   { name: 'phone', width: 390, height: 844, touch: true },
   { name: 'phone-landscape', width: 844, height: 390, touch: true },
   { name: 'dreampad-landscape', width: 620, height: 380, touch: true },

@@ -6,12 +6,68 @@
   --floor-b: #835a43;
   --rug: #c9b8e8;
   --floor-line: 78%;
+  /* The stage is a fixed 16:9, so on a 4:3 screen it is letterbox-shorter than
+     the viewport. Nothing can be cropped to fill that gap — the shelf and the
+     music box start at x3% and the door ends at x98.5%, so cropping even 2%
+     per side would eat a hotspot. Instead the *backdrop* fills the viewport
+     and only the objects stay on the stage: the wall, skirting and floor are
+     painted on the scene at exactly the same absolute height as the stage's
+     own, so the room simply continues past the stage edge and there is no
+     seam to see. */
+  --stage-h: min(100dvh, calc(100vw * 9 / 16));
+  --stage-top: calc((100dvh - var(--stage-h)) / 2);
+  --floor-y: calc(var(--stage-top) + var(--stage-h) * 0.78);
+  --skirt-y: calc(var(--stage-top) + var(--stage-h) * 0.765);
   position: fixed;
   inset: 0;
   overflow: hidden;
-  background: linear-gradient(to bottom, var(--wall-a) 0, var(--wall-b) var(--floor-line), var(--floor-a) var(--floor-line), var(--floor-b) 100%);
+  background:
+    radial-gradient(circle, var(--wall-dot) 1.2px, transparent 1.6px) 0 var(--stage-top) / 34px 34px,
+    radial-gradient(circle, var(--wall-dot) 1px, transparent 1.4px) 17px calc(var(--stage-top) + 17px) / 34px 34px,
+    linear-gradient(to bottom, var(--wall-a), var(--wall-b));
   display: grid;
   place-items: center;
+}
+/* the skirting board, continued across the full viewport width and height */
+.nursery-scene::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--skirt-y);
+  height: calc(var(--stage-h) * 0.02);
+  background: #f1e6dc;
+  filter: brightness(0.85);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+  z-index: 0;
+}
+/* the floor, likewise — opaque, so it covers the wall's dots below the line */
+.nursery-scene::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--floor-y);
+  bottom: 0;
+  background:
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.18) 0 2px, transparent 2px 9%),
+    linear-gradient(to bottom, var(--floor-a), var(--floor-b));
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* The scene now paints the wall, skirting and floor across the whole viewport,
+   so the stage's own copies would only add a seam where the two gradients
+   disagree. The shelf, rug and door stay — they're furniture, not backdrop. */
+.room__wall,
+.room__floor,
+.room__skirting {
+  display: none;
+}
+.nursery-scene .nursery-zoom {
+  position: relative;
+  z-index: 1;
 }
 [data-theme='sunrise'] .nursery-scene {
   --wall-a: #f7dbe6;
