@@ -39,7 +39,7 @@ export default function SecretRoom() {
   return (
     <div className="secret" role="region" aria-label="Pip's first dream">
       {ART.secretRoom ? (
-        <img className="secret__art" src={ART.secretRoom} alt="A tiny bedroom floating inside a glass bubble among the clouds" draggable={false} />
+        <img className="secret__art" src={ART.secretRoom} alt="A tiny bedroom floating inside a glass bubble among the clouds" draggable={false}  decoding="async"/>
       ) : (
         <div className="secret__art secret__art--css" role="img" aria-label="A tiny bedroom floating inside a bubble" />
       )}

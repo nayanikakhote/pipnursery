@@ -35,10 +35,24 @@ export function unlockAudio() {
       const d = noiseBuf.getChannelData(0);
       for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
     }
-    if (ctx.state === 'suspended') void ctx.resume();
+    hookVisibility();
+    if (ctx.state === 'suspended' && !document.hidden) void ctx.resume();
   } catch {
     /* audio unavailable: the site still works silently */
   }
+}
+
+// A backgrounded tab shouldn't keep a lullaby going, and a suspended context
+// costs nothing. Installed once, on first unlock.
+let visibilityHooked = false;
+function hookVisibility() {
+  if (visibilityHooked) return;
+  visibilityHooked = true;
+  document.addEventListener('visibilitychange', () => {
+    if (!ctx) return;
+    if (document.hidden) void ctx.suspend();
+    else if (!muted) void ctx.resume();
+  });
 }
 
 export function setMuted(m: boolean) {

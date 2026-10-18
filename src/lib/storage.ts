@@ -43,7 +43,12 @@ type SupabaseClient = {
 
 let clientPromise: Promise<SupabaseClient | null> | null = null;
 function getClient(): Promise<SupabaseClient | null> {
-  if (!isShared) return Promise.resolve(null);
+  // Written as a literal comparison rather than via `isShared` so the bundler
+  // can fold it away: with no env vars set, the dynamic import below becomes
+  // unreachable and the Supabase client is never emitted at all.
+  if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+    return Promise.resolve(null);
+  }
   if (!clientPromise) {
     clientPromise = import('@supabase/supabase-js')
       .then((m) => m.createClient(URL_!, KEY_!) as unknown as SupabaseClient)

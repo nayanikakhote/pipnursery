@@ -112,7 +112,7 @@ export default function GrowthChart() {
         <div className="gc__scroll" ref={scroller} tabIndex={0} aria-label="Pip's growth chart. Scroll up the wall.">
           <div className={`gc__wall ${ART.growthWall ? "has-art" : ""}`}>
             {ART.growthWall ? (
-              <img className="gc__wall-art" src={ART.growthWall} alt="" draggable={false} />
+              <img className="gc__wall-art" src={ART.growthWall} alt="" draggable={false}  decoding="async"/>
             ) : (
               <div className="gc__wall-art gc__wall-art--css" aria-hidden="true" />
             )}

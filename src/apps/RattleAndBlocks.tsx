@@ -120,7 +120,7 @@ function Rattles({ onBand }: { onBand: (id: string) => void }) {
               onPointerCancel={onUp}
               aria-label={`${r.name}. Tap to shake it, or drag it back and forth.`}
             >
-              {r.art ? <img src={r.art} alt="" draggable={false} /> : <span className={`rattle__css rattle__css--${r.id}`} aria-hidden="true" />}
+              {r.art ? <img src={r.art} alt="" draggable={false} loading="lazy" decoding="async" /> : <span className={`rattle__css rattle__css--${r.id}`} aria-hidden="true" />}
               <span className="rattle__burst" aria-hidden="true">
                 {bursts
                   .filter((b) => b.which === r.id)

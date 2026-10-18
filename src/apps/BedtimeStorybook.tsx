@@ -90,6 +90,7 @@ export default function BedtimeStorybook() {
   useEffect(() => {
     if (page === COVER || !soundOn) return;
     const bar = () => {
+      if (document.hidden) return; // don't hum into a background tab
       [0, 2, 4, 2].forEach((n, i) => sfx.note(PENTA[n], i * 1.1, 0.025));
     };
     bar();

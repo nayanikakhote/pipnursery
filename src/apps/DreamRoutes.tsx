@@ -111,7 +111,7 @@ export default function DreamRoutes() {
       <div className="dr__mapwrap" data-pannable="1">
         <div className="dr__map-inner">
         {mapArt ? (
-          <img className="dr__map" src={mapArt} alt="Pip's rooftop map: the nursery, a crooked chimney, a willow treehouse and a lilypad pond" draggable={false} />
+          <img className="dr__map" src={mapArt} alt="Pip's rooftop map: the nursery, a crooked chimney, a willow treehouse and a lilypad pond" draggable={false}  decoding="async"/>
         ) : (
           <div className="dr__map dr__map--css" role="img" aria-label="Pip's rooftop map" />
         )}
@@ -172,7 +172,7 @@ export default function DreamRoutes() {
 
       {detail && (
         <div className="dr__card" role="status">
-          {CREATURE_ART[detail.creature] && <img className="dr__card-pal" src={CREATURE_ART[detail.creature]} alt="" draggable={false} />}
+          {CREATURE_ART[detail.creature] && <img className="dr__card-pal" src={CREATURE_ART[detail.creature]} alt="" draggable={false} loading="lazy" decoding="async" />}
           <div>
             <h3>{detail.name}</h3>
             <p className="dr__who">

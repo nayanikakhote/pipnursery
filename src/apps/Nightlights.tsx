@@ -138,7 +138,7 @@ export default function Nightlights() {
                 aria-label={`${l.name}, for ${l.forWhom}. ${lit ? 'On' : 'Off'}. Tap to turn ${lit ? 'off' : 'on'}.`}
               >
                 {l.art ? (
-                  <img src={l.art} alt="" draggable={false} />
+                  <img src={l.art} alt="" draggable={false} loading="lazy" decoding="async" />
                 ) : (
                   <span className={`lamp__css lamp__css--${l.id}`} aria-hidden="true" />
                 )}
@@ -147,7 +147,7 @@ export default function Nightlights() {
               <div className="card">
                 <h3>{l.name}</h3>
                 <p className="card__for">
-                  {CREATURE_ART[l.creature] && <img className="card__pal" src={CREATURE_ART[l.creature]} alt="" draggable={false} />}
+                  {CREATURE_ART[l.creature] && <img className="card__pal" src={CREATURE_ART[l.creature]} alt="" draggable={false} loading="lazy" decoding="async" />}
                   for <b>{l.forWhom}</b> — {l.fear}
                 </p>
                 <p className="card__note">“{l.note}”</p>

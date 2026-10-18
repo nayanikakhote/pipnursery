@@ -59,22 +59,35 @@ PIP'S MIDNIGHT NURSERY
 a portfolio for Pip, Junior Dream Engineer
 made for haX.baby · Baby's First Website (Track 1)
 
-CHARACTER
-  Pip and the official art (Pip on cloud, portrait,
-  lullaby music box, dream lantern)
-  © haX.baby Track 1 creator asset pack
+CHARACTER & OFFICIAL ART
+  Pip, and the official renders used here
+  (Pip on his cloud, the portrait on his ID card,
+  the lullaby music box, the dream lantern)
+  © haX.baby — Track 1 creator asset pack
 
 ILLUSTRATIONS
-  extra scenes and props: AI-generated for this
-  project (tool credited on release), cleaned and
-  cut out by hand
+  Everything else you can see — the nursery props,
+  the computer, the nightlights, the rooftop map,
+  the rattles, the growth wall, the creatures, the
+  five story scenes, the crayon storybook, the
+  icon and sticker sheets, both wallpapers —
+  AI-generated for this project.
+  [TOOL NAME — Nayu, please fill this in before
+  submitting; it is the one credit I could not
+  write for you.]
+  Cut out, keyed and resized by a script in this
+  repo: tools/process_art.py
 
-PIXEL ICONS
-  hand-made pixel art, drawn in code
+DRAWN IN CODE (no image files)
+  The nursery room itself · the DreamPad shell ·
+  the pixel icon fallbacks · every constellation ·
+  the delivery routes · all UI chrome
 
 SOUND
-  every sound is synthesized live with the
-  Web Audio API. no audio files.
+  Every sound is synthesized live with the Web
+  Audio API. There are no audio files in this
+  project — the lullabies, the music box, the
+  chimes and Pip's giggle are all oscillators.
 
 FONTS (Google Fonts, SIL Open Font License)
   Fraunces · Fredoka · Pixelify Sans · VT323
@@ -82,10 +95,16 @@ FONTS (Google Fonts, SIL Open Font License)
 CODE
   React · Vite · TypeScript · Framer Motion
   Zustand · canvas-confetti
+  Optional shared guestbook: Supabase
 
 BUILT BY
-  Nayu (Nayanika Khote) & team, during the
-  48-hour sprint, 17–19 October 2026
+  Nayu (Nayanika Khote), during the 48-hour
+  sprint, 17–19 October 2026.
+  Built with Claude Code as a pair.
+
+WITH THANKS TO
+  Boo, Nibbles, Fern and Granny Owl, who are not
+  real, but who were very patient.
 
 thank you for visiting my little world. — pip`}</pre>
     </Notepad>

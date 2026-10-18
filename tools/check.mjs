@@ -576,6 +576,42 @@ async function runSize(browser, size) {
     }
   }
 
+  // ---- keyboard only: can you get anywhere, and can you see where you are? ----
+  if (!size.touch) {
+    const kb = await page.evaluate(async () => {
+      const out = { reached: 0, noRing: [] };
+      const seen = new Set();
+      for (let i = 0; i < 40; i++) {
+        const before = document.activeElement;
+        // Tab is synthesised by the harness below; here we just inspect
+        void before;
+      }
+      return out;
+    });
+    void kb;
+
+    const noRing = [];
+    for (let i = 0; i < 30; i++) {
+      await page.keyboard.press('Tab');
+      const info = await page.evaluate(() => {
+        const el = document.activeElement;
+        if (!el || el === document.body) return null;
+        const cs = getComputedStyle(el);
+        const ring = cs.outlineStyle !== 'none' && parseFloat(cs.outlineWidth) > 0;
+        const shadow = cs.boxShadow && cs.boxShadow !== 'none';
+        const r = el.getBoundingClientRect();
+        return {
+          tag: `${el.tagName.toLowerCase()}.${el.className?.toString().split(' ')[0] || '?'}`,
+          visible: r.width > 0 && r.height > 0,
+          ring: ring || shadow,
+        };
+      });
+      if (info && info.visible && !info.ring && !noRing.includes(info.tag)) noRing.push(info.tag);
+    }
+    if (noRing.length) notes.push(`[${where}] no visible focus ring: ${noRing.slice(0, 8).join(', ')}`);
+    await shot(page, `${where}-keyboard`);
+  }
+
   // theme toggle + mute toggle still work at the end
   const theme = page.locator('[aria-label*="sunrise" i], [aria-label*="night mode" i]').first();
   if (await theme.count()) {

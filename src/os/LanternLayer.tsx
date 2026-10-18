@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDream } from '../store/dreamStore';
 import { sfx, unlockAudio } from '../audio/audio';
-import { LANTERN_SPOTS } from '../apps/DesktopToys';
+import { LANTERN_SPOTS } from '../content/lantern';
 
 // Lights out: the desktop goes dark and the cursor carries Pip's lantern.
 // Everything is a CSS radial mask following a CSS variable, so there is no

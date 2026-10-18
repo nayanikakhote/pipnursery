@@ -946,3 +946,16 @@
 [data-motion='reduced'] .is-shifting .desk-area {
   animation: none;
 }
+
+/* Desktop icons are the main way around DreamOS, so keyboard focus has to be
+   obvious — the selection highlight alone isn't enough to see where you are. */
+.dicon:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 8px;
+  background: rgba(244, 201, 107, 0.18);
+}
+[data-theme='sunrise'] .dicon:focus-visible {
+  outline-color: var(--berry);
+  background: rgba(163, 64, 99, 0.12);
+}
