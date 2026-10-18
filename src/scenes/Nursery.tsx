@@ -378,8 +378,9 @@ export default function Nursery() {
       {zooming && <div className="zoom-flash" aria-hidden="true" />}
 
       {visits > 1 && !zooming && (
-        <button type="button" className="btn98 skip-btn" onClick={goComputer}>
-          go straight to my computer →
+        <button type="button" className="btn98 skip-btn" onClick={goComputer} aria-label="Skip the room and go straight to Pip's computer">
+          <span className="skip-btn__long">go straight to my computer →</span>
+          <span className="skip-btn__short">skip →</span>
         </button>
       )}
 

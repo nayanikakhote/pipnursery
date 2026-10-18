@@ -662,12 +662,40 @@
   }
 }
 
+/* The returning-visitor shortcut. It used to sit bottom-centre, where it
+   landed on the PIP blocks on a desktop and wrapped to two lines over the
+   desk on a phone. The top-left corner is the one part of the room with no
+   hotspot in it: the mobile hangs further right and the shelf sits lower. */
 .skip-btn {
   position: fixed;
-  left: 50%;
-  bottom: max(16px, env(safe-area-inset-bottom));
-  transform: translateX(-50%);
+  left: max(12px, env(safe-area-inset-left));
+  top: max(12px, env(safe-area-inset-top));
   z-index: 60;
+  white-space: nowrap;
+  font-size: 14px;
+  min-height: 44px;
+  padding: 4px 12px;
+  max-width: calc(100vw - 150px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.skip-btn__short {
+  display: none;
+}
+/* Below 1024px the hanging mobile reaches into the top-left corner, so the
+   button shortens to fit in front of it. The full sentence stays in the
+   aria-label either way. */
+@media (max-width: 1023px) {
+  .skip-btn__long {
+    display: none;
+  }
+  .skip-btn__short {
+    display: inline;
+  }
+  .skip-btn {
+    font-size: 13px;
+    padding: 3px 10px;
+  }
 }
 
 .bubble-pop {
