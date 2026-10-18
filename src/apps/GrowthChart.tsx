@@ -45,13 +45,73 @@ export default function GrowthChart() {
   const [tiptoe, setTiptoe] = useState(0);
   const [ruler, setRuler] = useState(false);
   const scroller = useRef<HTMLDivElement>(null);
+  const wallImg = useRef<HTMLImageElement>(null);
+  const [armed, setArmed] = useState(false);
 
-  // Marks draw themselves in as they scroll into view.
+  // Put the window on the floor of the wall, instantly.
+  //
+  // This used to just set scrollTop in an effect — but .gc__scroll is
+  // scroll-behavior: smooth (for the "tiptoe higher" button), so the jump to
+  // the floor became a smooth scroll *through the entire wall*, which swept
+  // every mark past the observer and completed the whole chart before you had
+  // touched anything. The jump is forced to instant, and the observer is only
+  // armed once the art has loaded and the scroll has settled.
   useEffect(() => {
     const root = scroller.current;
     if (!root) return;
+    let done = false;
+    const img = wallImg.current;
+
+    const place = () => {
+      if (done) return;
+      done = true;
+      const prev = root.style.scrollBehavior;
+      root.style.scrollBehavior = 'auto';
+      // a little above the very floor, so the lowest mark is already in view
+      root.scrollTop = Math.max(0, root.scrollHeight - root.clientHeight - 40);
+      root.style.scrollBehavior = prev;
+      requestAnimationFrame(() => requestAnimationFrame(() => setArmed(true)));
+    };
+
+    if (!img || img.complete) place();
+    else {
+      img.addEventListener('load', place, { once: true });
+      img.addEventListener('error', place, { once: true });
+    }
+    return () => {
+      img?.removeEventListener('load', place);
+      img?.removeEventListener('error', place);
+    };
+  }, []);
+
+  // Marks draw themselves in as they scroll into view.
+  useEffect(() => {
+    if (!armed) return;
+    const root = scroller.current;
+    if (!root) return;
+
+    const onScreen = () => {
+      const rr = root.getBoundingClientRect();
+      return [...root.querySelectorAll<HTMLElement>('[data-mark]')]
+        .filter((m) => {
+          const r = m.getBoundingClientRect();
+          return r.bottom > rr.top && r.top < rr.bottom;
+        })
+        .map((m) => m.dataset.mark!)
+        .filter(Boolean);
+    };
+
+    // Count what is genuinely on screen at rest, rather than trusting the
+    // observer's first burst, which describes the arrival rather than a scroll.
+    setSeen((s) => [...new Set([...s, ...onScreen()])]);
+
+    let first = true;
     const io = new IntersectionObserver(
       (entries) => {
+        if (first) {
+          first = false;
+          return;
+        }
         const fresh: string[] = [];
         entries.forEach((e) => {
           if (!e.isIntersecting) return;
@@ -64,7 +124,7 @@ export default function GrowthChart() {
     );
     root.querySelectorAll<HTMLElement>('[data-mark]').forEach((m) => io.observe(m));
     return () => io.disconnect();
-  }, []);
+  }, [armed]);
 
   useEffect(() => {
     if (seen.length === MARKS.length && complete('growth')) {
@@ -73,13 +133,6 @@ export default function GrowthChart() {
       sfx.sparkle();
     }
   }, [seen, complete, setMood, say]);
-
-  // The window scrolls UP the wall, so start at the bottom.
-  useEffect(() => {
-    const root = scroller.current;
-    if (!root) return;
-    root.scrollTop = root.scrollHeight;
-  }, []);
 
   const nextUnseen = MARKS.find((m) => !seen.includes(m.id));
 
@@ -112,7 +165,7 @@ export default function GrowthChart() {
         <div className="gc__scroll" ref={scroller} tabIndex={0} aria-label="Pip's growth chart. Scroll up the wall.">
           <div className={`gc__wall ${ART.growthWall ? "has-art" : ""}`}>
             {ART.growthWall ? (
-              <img className="gc__wall-art" src={ART.growthWall} alt="" draggable={false}  decoding="async"/>
+              <img ref={wallImg} className="gc__wall-art" src={ART.growthWall} alt="" draggable={false}  decoding="async"/>
             ) : (
               <div className="gc__wall-art gc__wall-art--css" aria-hidden="true" />
             )}

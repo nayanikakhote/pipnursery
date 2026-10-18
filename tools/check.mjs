@@ -101,7 +101,7 @@ const APP_CHECKS = [
   { id: 'nightlights', label: 'Nightlights', pokes: ['.lamp__btn', '.swatch', '.card__more', '.nl__controls .btn98'], pokeMax: 3, pokeWait: 260 },
   { id: 'chat', label: 'PipChat.exe', pokes: ['.pc__chip', '.pc__chip', '.pc__chip'], pokeMax: 1, pokeWait: 2600, chat: true },
   { id: 'wishes', label: 'Dream Wishes', pokes: ['.wish__sticker'], pokeMax: 3, pokeWait: 200, form: true },
-  { id: 'growth', label: 'Growth Chart', pokes: ['.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gmark__btn', '.gc__controls .btn98:first-of-type'], pokeMax: 1, pokeWait: 600 },
+  { id: 'growth', label: 'Growth Chart', opensIncomplete: '.gc__count', pokes: ['.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gmark__btn', '.gc__controls .btn98:first-of-type'], pokeMax: 1, pokeWait: 600 },
   { id: 'toys', label: 'Rattle & Blocks', pokes: ['.rattle__btn', '.rattle__btn', '.rattle__btn', '.tab98:nth-child(2)', '.bblock--tray', '.bcol', '.bblock--tray', '.bcol', '.bblock--tray', '.bcol', '.toys__controls .btn98', '.tab98:nth-child(3)', '.game__bar .btn98', '.stack__area', '.stack__area', '.tab98:nth-child(4)', '.card3', '.card3', '.card3', '.tab98:nth-child(5)', '.game__bar .btn98'], pokeMax: 1, pokeWait: 400 },
   { id: 'bedtime', label: 'Bedtime Story', pokes: ['.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child'], pokeMax: 1, pokeWait: 700 },
   { id: 'story', label: 'My_Story.doc', pokes: ['.hot', '.story__star'], pokeMax: 5, pokeWait: 420, after: '.story__end', finale: true },
@@ -434,6 +434,18 @@ async function runSize(browser, size) {
       // Scope every poke to this app's own window — other windows are open
       // behind it and share class names like .tab98 and .btn98.
       const scope = isPhone ? page.locator('.dp-app') : page.locator(`[aria-labelledby="wt-${app.id}"]`);
+
+      // Opening an app must never finish it for you. (The growth chart used to
+      // complete itself: its scroller is scroll-behavior: smooth, so the jump
+      // to the floor swept every mark past the observer before you touched it.)
+      if (app.opensIncomplete) {
+        const txt = (await scope.locator(app.opensIncomplete).first().textContent()) ?? '';
+        const m = txt.match(/(\d+)\s*\/\s*(\d+)/);
+        if (m && m[1] === m[2]) {
+          problems.push(`[${where}] ${app.id} was already complete ("${txt.trim()}") the moment it opened`);
+        }
+      }
+
       const seen = new Map();
       for (const sel of app.pokes ?? []) {
         const els = scope.locator(sel);
