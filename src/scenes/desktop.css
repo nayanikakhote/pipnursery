@@ -963,3 +963,24 @@
   outline-color: var(--berry);
   background: rgba(163, 64, 99, 0.12);
 }
+
+/* ---------- Pip's bubble vs the desktop icons ----------
+   Pip sits bottom-right and his bubble floats up and to the left. On a short
+   viewport (800x600, a small tablet or a windowed browser) the icon columns
+   reach far enough down that a long line ran straight through PIP_DEV_NOTES
+   and Credits.txt. There, the bubble moves to Pip's left instead — beside him,
+   below the icons — and its tail turns to point at him. */
+@media (max-height: 700px) {
+  .desk-bubble {
+    /* right-aligned to Pip rather than reaching across the desktop, so its
+       left edge never passes his own and it clears the icon columns */
+    right: 0;
+    bottom: 100%;
+    margin-bottom: 10px;
+    max-width: min(260px, 46vw);
+  }
+  .desk-bubble::after {
+    left: auto;
+    right: 26px;
+  }
+}
