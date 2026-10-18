@@ -29,12 +29,13 @@ const BedtimeStorybook = lazy(() => import('../apps/BedtimeStorybook'));
 const RattleAndBlocks = lazy(() => import('../apps/RattleAndBlocks'));
 const GrowthChart = lazy(() => import('../apps/GrowthChart'));
 const DreamWishes = lazy(() => import('../apps/DreamWishes'));
+const PipChat = lazy(() => import('../apps/PipChat'));
 
 export const APPS: AppDef[] = [
   { id: 'mypip', title: 'My Pip — employee file', label: 'My Pip', icon: 'idcard', group: 'me', w: 580, h: 640, component: MyPip },
   { id: 'story', title: 'My_Story.doc', label: 'My_Story.doc', icon: 'diary', group: 'me', w: 820, h: 620, component: MyStory },
   { id: 'wishes', title: 'Dream Wishes — guestbook', label: 'Dream Wishes', icon: 'guestbook', group: 'me', w: 640, h: 660, component: DreamWishes },
-  { id: 'chat', title: 'PipChat.exe', label: 'PipChat.exe', icon: 'chat', group: 'me', w: 460, h: 560, component: Placeholder },
+  { id: 'chat', title: 'PipChat.exe', label: 'PipChat.exe', icon: 'chat', group: 'me', w: 620, h: 580, component: PipChat },
   { id: 'stickers', title: 'Sticker Album', label: 'Stickers', icon: 'album', group: 'me', w: 520, h: 520, component: Stickers },
 
   { id: 'lullaby', title: 'Lullaby.exe — The Lullaby Lab', label: 'Lullaby.exe', icon: 'musicbox', group: 'work', w: 640, h: 700, component: LullabyLab },

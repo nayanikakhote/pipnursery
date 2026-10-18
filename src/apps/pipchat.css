@@ -1,0 +1,232 @@
+/* PipChat.exe — an early-2000s instant messenger, buddy list and all. */
+
+.pc {
+  display: grid;
+  grid-template-columns: 148px 1fr;
+  height: 100%;
+  min-height: 340px;
+  background: var(--face);
+  color: var(--cocoa);
+  container-type: inline-size;
+}
+
+/* ---------------- buddy list ---------------- */
+.pc__buddies {
+  padding: 8px 6px;
+  background: linear-gradient(180deg, #e9e0f3, #dcd1ee);
+  box-shadow: inset -2px 0 0 var(--lo2);
+  overflow-y: auto;
+}
+.pc__buddies h3 {
+  margin: 0 0 6px;
+  font-family: var(--font-pixel);
+  font-size: 14px;
+  color: var(--berry);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.pc__buddies ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+.pc__buddy {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 6px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.5);
+  font-family: var(--font-ui);
+  font-size: 13px;
+}
+.pc__buddy img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+.pc__buddy span {
+  display: grid;
+  line-height: 1.15;
+  min-width: 0;
+}
+.pc__buddy b {
+  font-weight: 600;
+}
+.pc__buddy em {
+  font-style: normal;
+  font-size: 11px;
+  opacity: 0.65;
+}
+.pc__buddy.is-off {
+  opacity: 0.5;
+}
+.pc__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--lo);
+  flex-shrink: 0;
+  margin: 0 8px;
+}
+.pc__buddy.is-off .pc__dot {
+  background: #b0a6c4;
+}
+
+/* ---------------- conversation ---------------- */
+.pc__main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 8px;
+  gap: 6px;
+}
+.pc__bar {
+  font-family: var(--font-pixel);
+  font-size: 15px;
+  padding: 2px 4px;
+}
+.pc__status {
+  font-size: 12px;
+  color: #3f7a4f;
+}
+.pc__status.is-away {
+  color: var(--lo2);
+}
+.pc__awaymsg {
+  margin: 0;
+  padding: 6px 9px;
+  border-radius: 6px;
+  background: #fff6d9;
+  border: 2px solid var(--gold);
+  font-family: var(--font-ui);
+  font-size: 13px;
+}
+
+.pc__log {
+  flex: 1;
+  min-height: 90px;
+  overflow-y: auto;
+  padding: 8px 10px;
+  border: 2px solid var(--lo2);
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.08);
+  scroll-behavior: smooth;
+}
+.pc__msg {
+  margin: 0 0 6px;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  animation: msg-in 0.25s ease;
+}
+@keyframes msg-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+.pc__msg b {
+  font-weight: 700;
+}
+.pc__msg--pip b {
+  color: var(--berry);
+}
+.pc__msg--you b {
+  color: #3a5d9c;
+}
+.pc__msg--typing {
+  opacity: 0.6;
+  font-style: italic;
+}
+.pc__msg--typing i {
+  font-style: normal;
+  animation: dot 1.1s infinite;
+}
+.pc__msg--typing i:nth-child(2) {
+  animation-delay: 0.17s;
+}
+.pc__msg--typing i:nth-child(3) {
+  animation-delay: 0.34s;
+}
+@keyframes dot {
+  0%,
+  60%,
+  100% {
+    opacity: 0.2;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+.pc__chips {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.pc__chip {
+  min-height: 44px;
+  font-size: 13px;
+  padding: 4px 10px;
+}
+
+.pc__compose {
+  display: flex;
+  gap: 6px;
+}
+.pc__compose input {
+  flex: 1;
+  min-width: 0;
+  min-height: 46px;
+  padding: 8px 10px;
+  font-family: var(--font-ui);
+  font-size: 15px;
+  border: 2px solid var(--lo2);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.08);
+}
+.pc__compose input:focus-visible {
+  outline: 3px solid var(--berry);
+  outline-offset: 1px;
+}
+.pc__send {
+  min-height: 46px;
+  min-width: 78px;
+}
+
+/* the buddy list is the first thing to go on a narrow screen */
+@container (max-width: 440px) {
+  .pc {
+    grid-template-columns: 1fr;
+  }
+  .pc__buddies {
+    box-shadow: inset 0 -2px 0 var(--lo2);
+    padding: 6px;
+  }
+  .pc__buddies ul {
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+  }
+  .pc__buddies h3 {
+    display: none;
+  }
+  .pc__buddy em {
+    display: none;
+  }
+}
+
+[data-motion='reduced'] .pc__msg,
+[data-motion='reduced'] .pc__msg--typing i {
+  animation: none;
+}
+[data-motion='reduced'] .pc__log {
+  scroll-behavior: auto;
+}

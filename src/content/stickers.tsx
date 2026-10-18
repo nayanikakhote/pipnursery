@@ -22,6 +22,7 @@ export const STICKERS: { id: string; icon: string; sticker?: string; name: strin
   { id: 'project-growth', icon: 'ruler', sticker: 'teddy', name: 'Measurer', hint: 'see every pencil mark' },
   { id: 'project-story', icon: 'diary', sticker: 'moon', name: 'Pip historian', hint: 'read my story' },
   { id: 'egg-secret', icon: 'sleepfile', sticker: 'mouse', name: 'Tickle champion', hint: 'pip is very ticklish…' },
+  { id: 'egg-chatted', icon: 'chat', sticker: 'mouse', name: 'Pen pal', hint: 'say something to me in PipChat' },
   { id: 'egg-wished', icon: 'guestbook', sticker: 'bow', name: 'Wish granter', hint: 'leave me a wish in the guestbook' },
   { id: 'toy-pip', icon: 'rattle', sticker: 'bow', name: 'P-I-P', hint: 'spell something with my blocks' },
   { id: 'egg-constellation-pip', icon: 'star', sticker: 'star', name: 'A star of your own', hint: 'read my story all the way to the end' },

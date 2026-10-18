@@ -99,6 +99,7 @@ const APP_CHECKS = [
   { id: 'lullaby', label: 'Lullaby.exe', pokes: ['.windkey', '.windkey', '.windkey', '.step', '.chip', '.lab__play'], pokeMax: 3, pokeWait: 260 },
   { id: 'routes', label: 'Dream_Routes.map', pokes: ['.roof', '.dr__deliver', '.roof', '.dr__deliver', '.roof', '.dr__deliver'], pokeMax: 1, pokeWait: 2100 },
   { id: 'nightlights', label: 'Nightlights', pokes: ['.lamp__btn', '.swatch', '.card__more', '.nl__controls .btn98'], pokeMax: 3, pokeWait: 260 },
+  { id: 'chat', label: 'PipChat.exe', pokes: ['.pc__chip', '.pc__chip', '.pc__chip'], pokeMax: 1, pokeWait: 2600, chat: true },
   { id: 'wishes', label: 'Dream Wishes', pokes: ['.wish__sticker'], pokeMax: 3, pokeWait: 200, form: true },
   { id: 'growth', label: 'Growth Chart', pokes: ['.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gmark__btn', '.gc__controls .btn98:first-of-type'], pokeMax: 1, pokeWait: 600 },
   { id: 'toys', label: 'Rattle & Blocks', pokes: ['.rattle__btn', '.rattle__btn', '.rattle__btn', '.tab98:nth-child(2)', '.bblock--tray', '.bcol', '.bblock--tray', '.bcol', '.bblock--tray', '.bcol', '.toys__controls .btn98'], pokeMax: 1, pokeWait: 300 },
@@ -344,6 +345,13 @@ async function runSize(browser, size) {
           await els.nth(i).click({ timeout: 3000, force: true }).catch(() => {});
           await wait(app.pokeWait ?? 180);
         }
+      }
+      if (app.chat) {
+        await scope.locator('.pc__compose input').fill('my name is Playwright');
+        await scope.locator('.pc__send').click();
+        await wait(3200);
+        const said = await scope.locator('.pc__msg--pip', { hasText: 'Playwright' }).count();
+        if (!said) problems.push(`[${where}] pipchat: Pip never used the name he was told`);
       }
       if (app.form) {
         await scope.locator('.wish__field input').first().fill('Playwright');
