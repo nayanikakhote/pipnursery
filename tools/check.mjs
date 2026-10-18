@@ -96,6 +96,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 // Each project app, with the things worth clicking inside it.
 const APP_CHECKS = [
   { id: 'lullaby', label: 'Lullaby.exe', pokes: ['.windkey', '.windkey', '.windkey', '.step', '.chip', '.lab__play'], pokeMax: 3, pokeWait: 260 },
+  { id: 'routes', label: 'Dream_Routes.map', pokes: ['.roof', '.dr__deliver', '.roof', '.dr__deliver', '.roof', '.dr__deliver'], pokeMax: 1, pokeWait: 2100 },
   { id: 'nightlights', label: 'Nightlights', pokes: ['.lamp__btn', '.swatch', '.card__more', '.nl__controls .btn98'], pokeMax: 3, pokeWait: 260 },
 ];
 
@@ -137,6 +138,8 @@ async function checkOverflow(page, where) {
       if (r.right < -2 || r.left > vw + 2) {
         const style = getComputedStyle(el);
         if (style.visibility === 'hidden' || style.opacity === '0') continue;
+        // things inside a deliberately pannable strip are meant to scroll away
+        if (el.closest('[data-pannable]')) continue;
         out.push(`${el.tagName.toLowerCase()}.${el.className?.toString().split(' ')[0]} is off-screen (left ${Math.round(r.left)})`);
       }
     }
@@ -294,9 +297,20 @@ async function runSize(browser, size) {
     try {
       await openApp(page, app.label, isPhone, size);
       await wait(600);
+      const seen = new Map();
       for (const sel of app.pokes ?? []) {
         const els = page.locator(sel);
-        const n = Math.min(await els.count(), app.pokeMax ?? 4);
+        const count = await els.count();
+        if (!count) continue;
+        if (app.pokeMax === 1) {
+          // walk through the matches across repeats of the same selector
+          const k = seen.get(sel) ?? 0;
+          seen.set(sel, k + 1);
+          await els.nth(k % count).click({ timeout: 3000, force: true }).catch(() => {});
+          await wait(app.pokeWait ?? 180);
+          continue;
+        }
+        const n = Math.min(count, app.pokeMax ?? 4);
         for (let i = 0; i < n; i++) {
           await els.nth(i).click({ timeout: 3000, force: true }).catch(() => {});
           await wait(app.pokeWait ?? 180);
