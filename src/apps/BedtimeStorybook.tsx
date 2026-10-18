@@ -17,7 +17,9 @@ interface Page {
 const PAGES: Page[] = [
   {
     text: 'Boo was a ghost. Boo was also afraid of the dark. Everyone said this was silly. Boo said it was very serious.',
-    hot: { label: 'Boo, hiding under the blanket', poke: 'shiver', x: 30, y: 44, w: 32, h: 34 },
+    // Boo's head actually sits at y67-89% of the page, not y44 — the old box
+    // was on the wall above him.
+    hot: { label: 'Boo, hiding under the blanket', poke: 'shiver', x: 28, y: 64, w: 46, h: 24 },
     alt: 'Boo peeking out from under a starry blanket, looking worried',
   },
   {
