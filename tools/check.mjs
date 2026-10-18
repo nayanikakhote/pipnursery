@@ -96,6 +96,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 // Each project app, with the things worth clicking inside it.
 const APP_CHECKS = [
   { id: 'lullaby', label: 'Lullaby.exe', pokes: ['.windkey', '.windkey', '.windkey', '.step', '.chip', '.lab__play'], pokeMax: 3, pokeWait: 260 },
+  { id: 'nightlights', label: 'Nightlights', pokes: ['.lamp__btn', '.swatch', '.card__more', '.nl__controls .btn98'], pokeMax: 3, pokeWait: 260 },
 ];
 
 /** Open an app by its icon/tile label, on either shell. */
@@ -301,6 +302,10 @@ async function runSize(browser, size) {
           await wait(app.pokeWait ?? 180);
         }
       }
+      // poking often scrolls the app body; show the top of it in the shot
+      await page.evaluate(() => {
+        document.querySelectorAll('.win98__body, .dp-app__body').forEach((el) => (el.scrollTop = 0));
+      });
       await wait(500);
       await shot(page, `${where}-app-${app.id}`);
       await checkOverflow(page, `${where} ${app.id}`);

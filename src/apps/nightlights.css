@@ -1,0 +1,326 @@
+/* The Nightlight Collection: a dark shelf, three lamps, a card under each. */
+
+.nl {
+  position: relative;
+  padding: 14px;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: linear-gradient(180deg, #262a4a, #343a60 55%, #45406d);
+  color: var(--cream);
+  overflow: hidden;
+  container-type: inline-size;
+}
+[data-theme='sunrise'] .nl {
+  background: linear-gradient(180deg, #4c4468, #6b5f87 55%, #8a7aa3);
+}
+/* Lights out is a scrim, not a filter on the whole panel: a filter would
+   compose with its children and dim the lit lamps too, which is the one thing
+   it must not do. The scrim sits above everything, and a lit lamp rises above
+   the scrim so its glow is the only light in the room. */
+.nl::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: rgba(8, 10, 22, 0.78);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+.nl.is-dark::after {
+  opacity: 1;
+}
+.nl.is-dark .lamp.is-on .lamp__btn,
+.nl.is-dark .lamp.is-on .lamp__spill,
+.nl.is-dark .lamp.is-on .lamp__sky {
+  z-index: 3;
+}
+.nl.is-dark .lamp.is-on .lamp__spill {
+  opacity: 0.8;
+}
+.nl.is-dark .nl__intro,
+.nl.is-dark .nl__detail,
+.nl.is-dark .nl__controls {
+  position: relative;
+  z-index: 3;
+}
+
+.nl__intro {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 15px;
+  line-height: 1.45;
+  text-align: center;
+  opacity: 0.92;
+}
+
+.nl__window {
+  position: absolute;
+  right: 14px;
+  top: 52px;
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  border: 5px solid rgba(241, 230, 220, 0.55);
+  background: radial-gradient(circle at 60% 30%, #3b4474, #1b1f3a);
+  box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  transition: opacity 0.5s;
+}
+.nl.is-dark .nl__window {
+  opacity: 0.25;
+}
+.nl__moon {
+  position: absolute;
+  left: 22%;
+  top: 22%;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  box-shadow: 9px 7px 0 0 var(--gold);
+}
+
+/* ---------------- the shelf ---------------- */
+.nl__shelf {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px;
+  padding: 16px 10px 10px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.12));
+  box-shadow: inset 0 0 0 2px rgba(255, 248, 241, 0.08);
+}
+
+.lamp {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 10px;
+}
+.lamp__spill {
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  width: 230px;
+  height: 230px;
+  margin-left: -115px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--glow), transparent 62%);
+  opacity: 0;
+  transition: opacity 0.55s ease;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+.lamp.is-on .lamp__spill {
+  opacity: 0.55;
+}
+
+.lamp__btn {
+  width: 100%;
+  max-width: 150px;
+  min-height: 110px;
+  display: grid;
+  place-items: center;
+  padding: 6px;
+  border: 0;
+  border-radius: 14px;
+  background: none;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+}
+.lamp__btn--static {
+  cursor: default;
+}
+.lamp__btn img {
+  width: 100%;
+  max-height: 150px;
+  object-fit: contain;
+  height: auto;
+  display: block;
+  filter: grayscale(0.55) brightness(0.62);
+  transition:
+    filter 0.5s,
+    transform 0.3s;
+}
+.lamp.is-on .lamp__btn img {
+  filter: none drop-shadow(0 0 22px var(--glow));
+  filter: drop-shadow(0 0 22px var(--glow)) brightness(1.08);
+}
+.lamp__btn:hover img {
+  transform: translateY(-4px);
+}
+.lamp__btn:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 14px;
+}
+/* Cloudberry breathes: a slow 6s loop, so you slow down with it. */
+.lamp__btn.is-breathing img {
+  animation: breathe 6s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 10px var(--glow)) brightness(0.95);
+  }
+  50% {
+    filter: drop-shadow(0 0 30px var(--glow)) brightness(1.15);
+  }
+}
+
+/* CSS fallback lamps, if the drawn ones were never made */
+.lamp__css {
+  width: 86px;
+  height: 96px;
+  display: block;
+  border-radius: 50% 50% 18px 18px;
+  background: linear-gradient(180deg, #f6ead8, #e3d2bf);
+  box-shadow: inset -6px -8px 0 rgba(0, 0, 0, 0.12);
+}
+.lamp.is-on .lamp__css {
+  background: linear-gradient(180deg, var(--glow), #f6ead8);
+  box-shadow: 0 0 26px var(--glow);
+}
+
+/* Starling throws stars onto the shelf wall behind it */
+.lamp__sky {
+  position: absolute;
+  inset: -10px -6px 40%;
+  pointer-events: none;
+  z-index: 0;
+}
+.lamp__sky i {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--glow);
+  box-shadow: 0 0 8px var(--glow);
+  animation: twinkle-star 2.6s ease-in-out infinite;
+}
+@keyframes twinkle-star {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(0.7);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+}
+
+/* ---------------- the card under each lamp ---------------- */
+.card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(255, 248, 241, 0.94);
+  color: var(--cocoa);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.25);
+  text-align: center;
+}
+.card h3 {
+  margin: 0 0 4px;
+  font-family: var(--font-serif);
+  font-size: 19px;
+  color: var(--berry);
+}
+.card__for {
+  margin: 0 0 6px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 1.4;
+}
+.card__pal {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+.card__note {
+  margin: 0 0 8px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 1.45;
+  font-style: italic;
+  opacity: 0.85;
+}
+.card__swatches {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+.swatch {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 3px solid rgba(92, 64, 51, 0.25);
+  cursor: pointer;
+  padding: 0;
+}
+.swatch.is-on {
+  border-color: var(--berry);
+  box-shadow: 0 0 0 3px rgba(163, 64, 99, 0.25);
+}
+.swatch:focus-visible {
+  outline: 3px solid var(--navy);
+  outline-offset: 2px;
+}
+.card__more {
+  width: 100%;
+  min-height: 44px;
+  font-size: 14px;
+}
+
+.nl__detail {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 248, 241, 0.12);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.nl__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+.nl__controls .btn98 {
+  min-height: 44px;
+  font-size: 15px;
+}
+.nl__count {
+  opacity: 0.85;
+}
+
+@container (max-width: 420px) {
+  .nl__shelf {
+    grid-template-columns: 1fr;
+  }
+  .nl__window {
+    width: 56px;
+    height: 56px;
+    top: 48px;
+  }
+}
+
+[data-motion='reduced'] .lamp__btn.is-breathing img,
+[data-motion='reduced'] .lamp__sky i {
+  animation: none;
+}

@@ -22,6 +22,7 @@ const LostSocks = lazy(() => import('../apps/TextFiles').then((m) => ({ default:
 const SecretFile = lazy(() => import('../apps/TextFiles').then((m) => ({ default: m.SecretFile })));
 const Stickers = lazy(() => import('../apps/Stickers'));
 const LullabyLab = lazy(() => import('../apps/LullabyLab'));
+const Nightlights = lazy(() => import('../apps/Nightlights'));
 
 export const APPS: AppDef[] = [
   { id: 'mypip', title: 'My Pip — employee file', label: 'My Pip', icon: 'idcard', group: 'me', w: 580, h: 640, component: MyPip },
@@ -31,7 +32,7 @@ export const APPS: AppDef[] = [
   { id: 'stickers', title: 'Sticker Album', label: 'Stickers', icon: 'album', group: 'me', w: 520, h: 520, component: Stickers },
 
   { id: 'lullaby', title: 'Lullaby.exe — The Lullaby Lab', label: 'Lullaby.exe', icon: 'musicbox', group: 'work', w: 640, h: 700, component: LullabyLab },
-  { id: 'nightlights', title: 'Nightlights/ — Nightlight Collection', label: 'Nightlights', icon: 'lampfolder', group: 'work', w: 720, h: 560, component: Placeholder },
+  { id: 'nightlights', title: 'Nightlights/ — Nightlight Collection', label: 'Nightlights', icon: 'lampfolder', group: 'work', w: 760, h: 660, component: Nightlights },
   { id: 'routes', title: 'Dream_Routes.map', label: 'Dream_Routes.map', icon: 'map', group: 'work', w: 780, h: 620, component: Placeholder },
   { id: 'toys', title: 'Rattle_&_Blocks/', label: 'Rattle & Blocks', icon: 'rattle', group: 'work', w: 720, h: 600, component: Placeholder },
   { id: 'bedtime', title: 'Bedtime_Story.book', label: 'Bedtime Story', icon: 'book', group: 'work', w: 820, h: 600, component: Placeholder },
