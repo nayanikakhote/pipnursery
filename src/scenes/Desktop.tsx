@@ -71,7 +71,7 @@ function DesktopIcon({ app, selected, onSelect }: { app: AppDef; selected: boole
       onBlur={() => (lookTarget.el = null)}
       aria-label={`${app.label}. Double-click or press Enter to open.`}
     >
-      <PixelIcon name={app.icon} size={44} />
+      <PixelIcon name={app.icon} size={64} />
       <span className="dicon__label">
         <FileLabel name={app.label} />
       </span>
@@ -251,8 +251,16 @@ export default function Desktop({ mode }: { mode: Mode }) {
               <DesktopIcon key={a.id} app={a} selected={selected === a.id} onSelect={setSelected} />
             ))}
           </fieldset>
+          {/* The toys and the text files used to share one tall column, which
+              left the desktop crammed into its left third. Two short columns
+              spread across the space instead. */}
           <div className="icon-col">
-            {[...byGroup('fun'), ...byGroup('files')].map((a) => (
+            {byGroup('fun').map((a) => (
+              <DesktopIcon key={a.id} app={a} selected={selected === a.id} onSelect={setSelected} />
+            ))}
+          </div>
+          <div className="icon-col">
+            {byGroup('files').map((a) => (
               <DesktopIcon key={a.id} app={a} selected={selected === a.id} onSelect={setSelected} />
             ))}
           </div>

@@ -136,7 +136,7 @@
   background: rgba(255, 248, 241, 0.88);
   color: var(--cocoa);
   text-align: left;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   box-shadow: 0 3px 0 rgba(0, 0, 0, 0.2);
   opacity: 0;
   transform: translateY(6px);

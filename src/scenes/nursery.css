@@ -290,7 +290,7 @@
   border: clamp(5px, 1cqw, 12px) solid #f1e6dc;
   background: none;
   overflow: hidden;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3), inset 0 0 0 3px rgba(0, 0, 0, 0.1);
 }
 .win-round__sky {
@@ -366,7 +366,7 @@
   padding: 0;
   border: 0;
   background: none;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
 }
 .mobile svg {
   width: 100%;
@@ -463,7 +463,7 @@
   padding: 0;
   border: 0;
   background: none;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   -webkit-tap-highlight-color: transparent;
 }
 .crt__monitor {
@@ -591,7 +591,7 @@
   padding: 0;
   border: 0;
   background: none;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   -webkit-tap-highlight-color: transparent;
 }
 .obj img {
@@ -696,7 +696,7 @@
   background: none;
   font-size: 11px;
   color: rgba(244, 201, 107, 0.35);
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   transition: color 0.3s, transform 0.3s, text-shadow 0.3s;
 }
 .hidden-star:hover {
@@ -1082,7 +1082,7 @@
   inset: 0;
   border: 0;
   background: none;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   -webkit-tap-highlight-color: transparent;
 }
 .pip-tuck:focus-visible {

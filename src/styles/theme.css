@@ -111,7 +111,7 @@ button {
   padding: 4px 14px;
   border: 0;
   border-radius: 3px;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   background: var(--face);
   box-shadow:
     inset -2px -2px 0 var(--lo2),
@@ -306,7 +306,7 @@ button {
   border-radius: 6px 6px 0 0;
   background: var(--face);
   color: var(--cocoa);
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   box-shadow: inset 2px 2px 0 var(--hi), inset -2px 0 0 var(--lo2);
   min-height: 34px;
 }
@@ -326,4 +326,22 @@ button {
     min-height: 44px;
     padding: 8px 16px 6px;
   }
+}
+
+/* ---------- the cursor ----------
+   A little white heart, outlined in ink so it stays visible against the
+   night wallpaper *and* the pale sunrise one. The hotspot sits on the heart's
+   upper-left lobe, where an arrow's tip would be, so clicking still feels
+   precise. Interactive things get the same heart with a gold sparkle, so
+   hover is still a visible state and not just a colour change.
+
+   Touch devices never see any of this, and the browser falls back to the
+   normal arrow if the data URI can't be loaded. */
+:root {
+  --cur: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 32 32'%3E%3Cpath d='M16 28.6C16 28.6 3.2 20.3 3.2 11.6C3.2 7 7 3.2 11.6 3.2C14 3.2 16 4.7 16 4.7C16 4.7 18 3.2 20.4 3.2C25 3.2 28.8 7 28.8 11.6C28.8 20.3 16 28.6 16 28.6Z' fill='%23FFFFFF' stroke='%231F2233' stroke-width='2.4' stroke-linejoin='round'/%3E%3C/svg%3E") 8 6, auto;
+  --cur-pointer: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 32 32'%3E%3Cpath d='M16 28.6C16 28.6 3.2 20.3 3.2 11.6C3.2 7 7 3.2 11.6 3.2C14 3.2 16 4.7 16 4.7C16 4.7 18 3.2 20.4 3.2C25 3.2 28.8 7 28.8 11.6C28.8 20.3 16 28.6 16 28.6Z' fill='%23FFFFFF' stroke='%231F2233' stroke-width='2.4' stroke-linejoin='round'/%3E%3Cpath d='M26 5.5l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z' fill='%23F4C96B' stroke='%231F2233' stroke-width='1' stroke-linejoin='round'/%3E%3C/svg%3E") 8 6, pointer;
+}
+html,
+body {
+  cursor: var(--cur);
 }

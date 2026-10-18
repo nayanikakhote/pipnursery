@@ -142,7 +142,7 @@
   border: 0;
   background: none;
   border-radius: 14px;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   -webkit-tap-highlight-color: transparent;
 }
 .book__hot::after {
@@ -241,7 +241,7 @@
   width: 56px;
   border: 0;
   background: none;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   opacity: 0;
   transition: opacity 0.25s;
 }
@@ -295,7 +295,7 @@
   padding: 0;
   border: 0;
   background: none;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   position: relative;
 }
 .book__dot::before {

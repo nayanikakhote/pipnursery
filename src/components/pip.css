@@ -8,7 +8,7 @@
   -webkit-tap-highlight-color: transparent;
 }
 button.pip {
-  cursor: pointer;
+  cursor: var(--cur-pointer);
 }
 button.pip:focus-visible {
   outline: 3px dotted var(--berry);

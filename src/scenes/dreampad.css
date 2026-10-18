@@ -106,7 +106,7 @@
   font-size: 12px;
   line-height: 1.1;
   text-align: center;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   min-height: 84px;
   -webkit-tap-highlight-color: transparent;
 }
@@ -149,7 +149,7 @@
   border: 0;
   background: none;
   font-size: 16px;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   color: var(--berry);
 }
 .dp-app__body {
@@ -170,7 +170,7 @@
   height: 48px;
   border-radius: 50%;
   border: 0;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   display: grid;
   place-items: center;
   font-size: 18px;

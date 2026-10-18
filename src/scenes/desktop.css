@@ -14,7 +14,7 @@
   place-items: center;
   font-family: var(--font-mono);
   padding: 24px;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
 }
 .boot__inner {
   width: min(640px, 100%);
@@ -68,6 +68,10 @@
 }
 
 /* ---------- desktop ---------- */
+:root {
+  /* one width for an icon tile, so the work group's columns match it */
+  --dicon-w: clamp(92px, 9vw, 132px);
+}
 .desktop {
   position: fixed;
   inset: 0;
@@ -137,22 +141,24 @@
 
 .icons {
   position: absolute;
-  inset: 14px auto 14px 14px;
+  inset: 20px auto 20px 24px;
   display: flex;
-  gap: 14px;
+  /* Generous, viewport-scaled gaps: the icons used to sit in a cramped block
+     in the left third with the whole sky empty beside them. */
+  gap: clamp(18px, 5vw, 76px);
   align-items: flex-start;
   flex-wrap: wrap;
-  max-width: calc(100% - 200px);
+  max-width: calc(100% - 230px);
 }
 .icon-col {
   display: grid;
   grid-auto-rows: min-content;
-  gap: 6px;
+  gap: clamp(8px, 1.4vw, 20px);
 }
 .work-group {
   display: grid;
-  grid-template-columns: repeat(2, 96px);
-  gap: 6px;
+  grid-template-columns: repeat(2, var(--dicon-w));
+  gap: clamp(8px, 1.4vw, 20px);
   margin: 0;
   padding: 8px 8px 10px;
   border: 2px dashed rgba(244, 201, 107, 0.6);
@@ -171,18 +177,21 @@
   text-shadow: none;
 }
 .dicon {
-  width: 96px;
+  width: var(--dicon-w);
   display: grid;
   justify-items: center;
   gap: 4px;
   padding: 6px 2px;
   border: 1px dotted transparent;
   background: none;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   color: var(--cream);
   -webkit-tap-highlight-color: transparent;
 }
 .dicon .pixel-icon {
+  /* overrides the size attribute so the glyph scales with the viewport */
+  width: clamp(46px, 4.6vw, 68px);
+  height: clamp(46px, 4.6vw, 68px);
   filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, 0.35));
   transition: transform 0.15s;
 }
@@ -191,7 +200,7 @@
 }
 .dicon__label {
   font-family: var(--font-pixel);
-  font-size: 13px;
+  font-size: clamp(12px, 1.05vw, 16px);
   line-height: 1.15;
   text-align: center;
   padding: 1px 4px;
@@ -299,7 +308,7 @@
   padding: 0;
   border: 0;
   border-radius: 3px;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   display: grid;
   place-items: center;
   font-size: 13px;
@@ -406,7 +415,7 @@
   padding: 0 4px;
   border: 0;
   background: none;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   display: grid;
   place-items: center;
   font-family: var(--font-pixel);
@@ -430,7 +439,7 @@
   color: var(--cocoa);
   padding: 0 6px;
   height: 34px;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   border-radius: 4px;
 }
 
@@ -531,7 +540,7 @@
   font-size: 14px;
   color: var(--cocoa);
   text-align: left;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   border-radius: 3px;
 }
 .start-item:hover,
@@ -776,7 +785,7 @@
   place-items: center;
   border: 0;
   background: none;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   font-size: 22px;
   color: var(--gold);
   text-shadow: 0 0 12px rgba(244, 201, 107, 0.95);

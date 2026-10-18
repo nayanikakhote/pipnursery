@@ -55,7 +55,7 @@
   height: 44px;
   border: 0;
   background: none;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   font-size: 19px;
   line-height: 1;
   color: rgba(255, 248, 241, 0.25);
@@ -179,7 +179,7 @@
   position: absolute;
   border: 0;
   background: none;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   border-radius: 50%;
   min-width: 48px;
   min-height: 48px;

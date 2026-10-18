@@ -101,7 +101,7 @@
   border: 2px solid transparent;
   border-radius: 8px;
   background: none;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   padding: 0;
 }
 .wish__sticker.is-on {

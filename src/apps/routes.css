@@ -142,7 +142,7 @@
   border: 0;
   border-radius: 50%;
   background: none;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   display: grid;
   place-items: center;
   z-index: 2;

@@ -141,7 +141,7 @@
   border: 0;
   border-radius: 14px;
   background: none;
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   position: relative;
   z-index: 1;
 }
@@ -277,7 +277,7 @@
   height: 44px;
   border-radius: 50%;
   border: 3px solid rgba(92, 64, 51, 0.25);
-  cursor: pointer;
+  cursor: var(--cur-pointer);
   padding: 0;
 }
 .swatch.is-on {
