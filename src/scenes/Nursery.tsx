@@ -7,6 +7,7 @@ import { useDream } from '../store/dreamStore';
 import { sfx, unlockAudio, PENTA } from '../audio/audio';
 import { lines, pick } from '../content/copy';
 import { ART } from '../content/assets';
+import { asset } from '../lib/asset';
 import './nursery.css';
 
 const HIDDEN_STARS = [
@@ -210,7 +211,7 @@ export default function Nursery() {
               window.setTimeout(() => setBoxOpen(false), 2400);
             }}
           >
-            <img src="/assets/music-box.webp" alt="" draggable={false} />
+            <img src={asset('assets/music-box.webp')} alt="" draggable={false} />
           </button>
 
           {/* dream lantern */}
@@ -225,7 +226,7 @@ export default function Nursery() {
               window.setTimeout(() => setLampWarm(false), 3200);
             }}
           >
-            <img src="/assets/dream-lantern.webp" alt="" draggable={false} />
+            <img src={asset('assets/dream-lantern.webp')} alt="" draggable={false} />
           </button>
 
           {/* toy blocks */}

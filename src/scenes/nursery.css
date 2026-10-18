@@ -749,3 +749,43 @@
     font-size: clamp(14px, 5cqw, 34px);
   }
 }
+
+/* Nursery props are small pictures but must stay comfortable to tap.
+   The box grows to 44px where needed; the art stays bottom-centred in it. */
+.obj {
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+/* ---------- portrait phones: breathing room ---------- */
+@media (max-aspect-ratio: 4/5) {
+  /* the shelf was climbing into the window */
+  .room__shelf {
+    top: 41%;
+  }
+  .blocks {
+    width: 22%;
+  }
+  .music-box {
+    width: 26%;
+  }
+}
+
+/* ---------- landscape phones: Pip lies down, props shrink ---------- */
+@media (max-height: 450px) and (orientation: landscape) {
+  .nursery-pip {
+    width: 15%;
+    bottom: 6%;
+  }
+  .nursery-bubble {
+    top: 6%;
+    font-size: 13px;
+  }
+  .obj {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}

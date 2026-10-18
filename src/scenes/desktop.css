@@ -597,3 +597,32 @@
     transform: translateY(-10px) rotate(8deg);
   }
 }
+
+/* ---------- touch: every target gets its 44px ---------- */
+@media (pointer: coarse) {
+  .taskbar {
+    height: 58px;
+    gap: 4px;
+  }
+  .start-btn {
+    min-height: 46px;
+  }
+  .tray {
+    height: 48px;
+  }
+  .tray-btn {
+    min-width: 44px;
+    height: 44px;
+  }
+  .tray-clock {
+    height: 44px;
+    min-width: 58px;
+  }
+  .task-tab {
+    min-height: 44px;
+  }
+  .win98__btn {
+    min-width: 32px;
+    min-height: 30px;
+  }
+}

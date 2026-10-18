@@ -1,3 +1,4 @@
+import { asset } from '../lib/asset';
 import { useState } from 'react';
 import { useDream } from '../store/dreamStore';
 import { WORK } from '../os/apps';
@@ -28,7 +29,7 @@ export default function MyPip() {
             <div className="id-card__band">MIDNIGHT NURSERY · STAFF</div>
             <div className="id-card__body">
               <div className="id-card__photo">
-                <img src="/assets/pip-portrait.webp" alt="Official portrait of Pip holding a lantern and a music box" />
+                <img src={asset('assets/pip-portrait.webp')} alt="Official portrait of Pip holding a lantern and a music box" />
               </div>
               <dl className="id-card__fields">
                 <dt>Name</dt>

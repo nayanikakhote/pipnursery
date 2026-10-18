@@ -2,6 +2,7 @@ import type React from 'react';
 import { useEffect, useRef } from 'react';
 import { pointer, lookTarget } from '../lib/pointer';
 import { useDream, type PipMood } from '../store/dreamStore';
+import { asset } from '../lib/asset';
 import './pip.css';
 
 // Eye socket geometry measured on /assets/pip-base.webp (585 × 778).
@@ -93,7 +94,7 @@ export default function Pip({ width, onClick, label = 'Pip', mood: moodProp, cla
 
   const inner = (
       <span className="pip__body">
-        <img src="/assets/pip-base.webp" alt={onClick ? '' : 'Pip, a cute baby with a round skull face and a starry nightcap'} draggable={false} />
+        <img src={asset('assets/pip-base.webp')} alt={onClick ? '' : 'Pip, a cute baby with a round skull face and a starry nightcap'} draggable={false} />
         {SOCKETS.map((s, i) => (
           <span
             key={i}
