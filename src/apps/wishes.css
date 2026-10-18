@@ -1,0 +1,239 @@
+/* Dream Wishes — a 2000s guestbook, pinned notes and all. */
+
+.wish {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  min-height: 100%;
+  background:
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0 10px, transparent 10px 20px),
+    linear-gradient(180deg, #343059, #4c4276);
+  color: var(--cream);
+  container-type: inline-size;
+}
+[data-theme='sunrise'] .wish {
+  background: linear-gradient(180deg, #5d5179, #8f7fa8);
+}
+
+.wish__head {
+  text-align: center;
+}
+.wish__head h2 {
+  margin: 0;
+  font-family: var(--font-pixel);
+  font-size: clamp(20px, 5cqw, 27px);
+  color: var(--gold);
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.35);
+}
+.wish__sub {
+  margin: 4px 0 0;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+/* ---------------- the form ---------------- */
+.wish__form {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(255, 248, 241, 0.95);
+  color: var(--cocoa);
+}
+.wish__row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+.wish__field {
+  display: grid;
+  gap: 3px;
+  flex: 1;
+  min-width: 150px;
+  font-family: var(--font-pixel);
+  font-size: 14px;
+}
+.wish__field i {
+  font-style: normal;
+  opacity: 0.55;
+}
+.wish__field input,
+.wish__field textarea {
+  font-family: var(--font-ui);
+  font-size: 15px;
+  padding: 9px 10px;
+  min-height: 44px;
+  border: 2px solid var(--lo2);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.1);
+  resize: vertical;
+}
+.wish__field input:focus-visible,
+.wish__field textarea:focus-visible {
+  outline: 3px solid var(--berry);
+  outline-offset: 1px;
+}
+
+.wish__stickers {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 4px 6px 6px;
+  border: 2px solid rgba(92, 64, 51, 0.25);
+  border-radius: 6px;
+}
+.wish__stickers legend {
+  font-family: var(--font-pixel);
+  font-size: 13px;
+  padding: 0 4px;
+}
+.wish__sticker {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+.wish__sticker.is-on {
+  border-color: var(--berry);
+  background: rgba(239, 198, 210, 0.45);
+}
+.wish__sticker:focus-visible {
+  outline: 3px solid var(--navy);
+  outline-offset: 1px;
+}
+
+/* the honeypot: present for robots, gone for everybody else */
+.wish__honey {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.wish__send {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.wish__btn {
+  min-height: 48px;
+  min-width: 180px;
+  font-size: 16px;
+  background: linear-gradient(135deg, #f6e2b6, #efc6d2);
+  font-weight: 600;
+}
+.wish__err {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  color: var(--berry-dark);
+  font-weight: 600;
+}
+
+/* ---------------- the wall ---------------- */
+.wish__wallhead {
+  margin: 0;
+  font-family: var(--font-pixel);
+  font-size: 18px;
+  color: var(--cream);
+}
+.wish__loading {
+  margin: 0;
+  opacity: 0.7;
+}
+.wish__wall {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
+}
+.note {
+  position: relative;
+  padding: 26px 12px 10px;
+  border-radius: 3px;
+  background: #fff6e0;
+  color: #43304a;
+  box-shadow: 2px 4px 0 rgba(0, 0, 0, 0.28);
+  transform: rotate(-0.7deg);
+  animation: pin-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.note:nth-child(even) {
+  transform: rotate(0.9deg);
+  background: #fdecf1;
+}
+.note:nth-child(3n) {
+  background: #f1ecff;
+}
+.note.is-seed {
+  background: #eaf6ef;
+}
+@keyframes pin-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9) rotate(-4deg);
+  }
+}
+.note__pin {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
+}
+.note__msg {
+  margin: 0 0 6px;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.note__by {
+  margin: 0;
+  font-family: var(--font-pixel);
+  font-size: 13px;
+  color: var(--berry);
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: baseline;
+}
+.note__by time {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  opacity: 0.55;
+  color: var(--cocoa);
+}
+
+.wish__more {
+  min-height: 44px;
+  align-self: center;
+  min-width: 200px;
+}
+
+@container (max-width: 420px) {
+  .wish__wall {
+    grid-template-columns: 1fr;
+  }
+  .wish__row {
+    gap: 8px;
+  }
+}
+
+[data-motion='reduced'] .note {
+  animation: none;
+}

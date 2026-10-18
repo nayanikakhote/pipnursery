@@ -99,6 +99,7 @@ const APP_CHECKS = [
   { id: 'lullaby', label: 'Lullaby.exe', pokes: ['.windkey', '.windkey', '.windkey', '.step', '.chip', '.lab__play'], pokeMax: 3, pokeWait: 260 },
   { id: 'routes', label: 'Dream_Routes.map', pokes: ['.roof', '.dr__deliver', '.roof', '.dr__deliver', '.roof', '.dr__deliver'], pokeMax: 1, pokeWait: 2100 },
   { id: 'nightlights', label: 'Nightlights', pokes: ['.lamp__btn', '.swatch', '.card__more', '.nl__controls .btn98'], pokeMax: 3, pokeWait: 260 },
+  { id: 'wishes', label: 'Dream Wishes', pokes: ['.wish__sticker'], pokeMax: 3, pokeWait: 200, form: true },
   { id: 'growth', label: 'Growth Chart', pokes: ['.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gc__controls .btn98:last-of-type', '.gmark__btn', '.gc__controls .btn98:first-of-type'], pokeMax: 1, pokeWait: 600 },
   { id: 'toys', label: 'Rattle & Blocks', pokes: ['.rattle__btn', '.rattle__btn', '.rattle__btn', '.tab98:nth-child(2)', '.bblock--tray', '.bcol', '.bblock--tray', '.bcol', '.bblock--tray', '.bcol', '.toys__controls .btn98'], pokeMax: 1, pokeWait: 300 },
   { id: 'bedtime', label: 'Bedtime Story', pokes: ['.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child', '.book__hot', '.book__bar .btn98:last-child'], pokeMax: 1, pokeWait: 700 },
@@ -145,6 +146,9 @@ async function checkOverflow(page, where) {
         if (style.visibility === 'hidden' || style.opacity === '0') continue;
         // things inside a deliberately pannable strip are meant to scroll away
         if (el.closest('[data-pannable]')) continue;
+        // and something hidden from assistive tech (the guestbook's honeypot)
+        // is parked off-screen on purpose
+        if (el.closest('[aria-hidden="true"]')) continue;
         out.push(`${el.tagName.toLowerCase()}.${el.className?.toString().split(' ')[0]} is off-screen (left ${Math.round(r.left)})`);
       }
     }
@@ -164,6 +168,8 @@ async function checkTouchTargets(page, where) {
       if (s.visibility === 'hidden' || s.opacity === '0' || s.pointerEvents === 'none') continue;
       // hidden-star eggs and decorative hotspots are deliberately tiny
       if (el.classList.contains('hidden-star') || el.dataset.tiny === '1') continue;
+      // and anything hidden from assistive tech isn't a target at all
+      if (el.closest('[aria-hidden="true"]')) continue;
       // a button may push its hit area out with an ::after overlay
       const after = getComputedStyle(el, '::after');
       const aw = parseFloat(after.width) || 0;
@@ -338,6 +344,14 @@ async function runSize(browser, size) {
           await els.nth(i).click({ timeout: 3000, force: true }).catch(() => {});
           await wait(app.pokeWait ?? 180);
         }
+      }
+      if (app.form) {
+        await scope.locator('.wish__field input').first().fill('Playwright');
+        await scope.locator('.wish__field textarea').first().fill('checking your wall works, pip. sleep well!');
+        await scope.locator('.wish__btn').click();
+        await wait(700);
+        const pinned = await scope.locator('.note', { hasText: 'checking your wall works' }).count();
+        if (!pinned) problems.push(`[${where}] guestbook: the wish never appeared on the wall`);
       }
       if (app.after) {
         const el = scope.locator(app.after).first();

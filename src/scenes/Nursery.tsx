@@ -6,7 +6,7 @@ import { MuteToggle, ThemeToggle, SpeechBubble } from '../components/Controls';
 import { useDream } from '../store/dreamStore';
 import { sfx, unlockAudio, PENTA } from '../audio/audio';
 import { lines, pick } from '../content/copy';
-import { STICKERS } from '../apps/Stickers';
+import { STICKERS } from '../content/stickers';
 import { ART, SCREENS, art } from '../content/assets';
 import { asset } from '../lib/asset';
 import './nursery.css';
